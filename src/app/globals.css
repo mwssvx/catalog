@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #eef1f6;
+  --paper-2: #ffffff;
+  --ink: #1c1f26;
+  --muted: #667085;
+  --rule: #e4e7ee;
+  --olive: #2f6fed;
+  --sold: #e14b40;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-olive: var(--olive);
+  --color-sold: var(--sold);
+  --font-sans: var(--font-jakarta);
+  --radius-box: 1.5rem;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+}
+
+.field:focus {
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olive) 16%, transparent);
+}
+
+.chip {
+  border-radius: 14px;
+  background: var(--paper);
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
