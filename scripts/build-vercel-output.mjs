@@ -21,11 +21,16 @@ await esbuild.build({
   platform: "node",
   target: "node20",
   format: "esm",
-  packages: "external",
+  packages: "bundle",
   alias: {
     "@": path.join(root, "src"),
   },
 });
+
+writeFileSync(
+  path.join(funcDir, "package.json"),
+  JSON.stringify({ type: "module" }),
+);
 
 writeFileSync(
   path.join(funcDir, ".vc-config.json"),
