@@ -58,7 +58,6 @@ yarn-error.log*
 
 # vercel / railway local
 .vercel
-/api/index.js
 
 # typescript
 *.tsbuildinfo
