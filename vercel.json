@@ -1,5 +1,35 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/dist/assets/$1"
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/dist/favicon.svg"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/dist/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/dist/sitemap.xml"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/dist/uploads/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/dist/index.html"
+    }
+  ]
 }
