@@ -1,25 +1,25 @@
-"use client";
-
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "@/i18n/navigation";
 
 export function LogoutButton() {
-  const t = useTranslations("studio");
+  const { t } = useTranslation();
   const router = useRouter();
 
   async function logout() {
-    await fetch("/api/v1/auth/logout", { method: "POST" });
+    await fetch("/api/v1/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     router.push("/");
-    router.refresh();
   }
 
   return (
     <button
       type="button"
-      onClick={logout}
-      className="rounded-[14px] bg-paper px-4 py-2 text-sm font-medium text-muted hover:text-ink"
+      onClick={() => void logout()}
+      className="btn btn-secondary"
     >
-      {t("signOut")}
+      {t("studio.signOut")}
     </button>
   );
 }

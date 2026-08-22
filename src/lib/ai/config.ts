@@ -5,3 +5,7 @@ export function isAiConfigured(): boolean {
 export function aiModel(): string {
   return process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
 }
+
+export function aiOrgModel(): string {
+  return process.env.OPENAI_ORG_MODEL?.trim() || aiModel();
+}

@@ -1,32 +1,38 @@
-"use client";
-
-import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/navigation";
-import { routing, type AppLocale } from "@/i18n/routing";
-import { useSearchParams } from "next/navigation";
+import i18n, { locales, type AppLocale } from "@/i18n";
+import {
+  stripLocale,
+  useLocale,
+  usePathname,
+  withLocale,
+} from "@/i18n/navigation";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function LanguageSwitcher() {
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   function switchTo(next: AppLocale) {
+    void i18n.changeLanguage(next);
     const query = searchParams.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { locale: next });
+    const path = withLocale(pathname || "/", next);
+    navigate(query ? `${path}?${query}` : path, { replace: true });
   }
 
+  void stripLocale;
+
   return (
-    <div className="flex rounded-[14px] bg-paper p-1">
-      {routing.locales.map((code) => (
+    <div className="flex rounded-[14px] border border-rule bg-paper p-1">
+      {locales.map((code) => (
         <button
           key={code}
           type="button"
           onClick={() => switchTo(code)}
           className={
             locale === code
-              ? "rounded-[10px] bg-ink px-2.5 py-1 text-xs font-semibold text-white"
-              : "rounded-[10px] px-2.5 py-1 text-xs font-semibold text-muted"
+              ? "chip is-active px-2.5 py-1 text-xs"
+              : "chip border-transparent bg-transparent px-2.5 py-1 text-xs text-muted"
           }
         >
           {code.toUpperCase()}

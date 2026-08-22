@@ -145,7 +145,7 @@ const MATERIAL_WORDS: Array<[RegExp, string]> = [
 
 function extractQuantity(text: string): { quantity: number | null; rest: string } {
   const labeled =
-    /(?:осталось|осталось:|кол-во|количество|канча\s*калды|калды|калып)\s*[:\-]?\s*(\d{1,4})|(\d{1,4})\s*(?:шт|штук[аи]?|калып|калды|pcs|pieces|left)/i.exec(
+    /(?:осталось|осталось:|кол-во|количество|канча\s*калды|калды|калып)\s*[:-]?\s*(\d{1,4})|(\d{1,4})\s*(?:шт|штук[аи]?|калып|калды|pcs|pieces|left)/i.exec(
       text,
     );
 

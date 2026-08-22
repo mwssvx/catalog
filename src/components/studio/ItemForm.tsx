@@ -1,36 +1,79 @@
-"use client";
 
-import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
-import { CoverPhoto } from "@/components/CoverPhoto";
+import { useTranslation } from "react-i18next";
+import { ConfirmDialog } from "@/components/studio/ConfirmDialog";
+import { MediaPicker, type MediaSlot } from "@/components/studio/MediaPicker";
 import { useRouter } from "@/i18n/navigation";
 import { parseNotes } from "@/lib/catalog/parse";
+import { missingFields } from "@/lib/catalog/normalize";
+import { persistableUrl } from "@/lib/media/delivery";
+import { splitCsv } from "@/lib/catalog/studio-actions";
 import {
   CATEGORIES,
   CONDITIONS,
   STATUSES,
   type Item,
+  type ProductVariant,
 } from "@/lib/catalog/types";
 
-type ItemFormProps = {
-  item?: Item;
-};
+function slotsFrom(urls: string[], kind: "image" | "video"): MediaSlot[] {
+  return urls.map((url) => ({ url, kind }));
+}
+
+function emptyVariant(): ProductVariant {
+  return {
+    id: crypto.randomUUID(),
+    color: "",
+    photos: [],
+    videos: [],
+  };
+}
+
+function asUuid(id: string): string {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    id,
+  )
+    ? id
+    : crypto.randomUUID();
+}
+
+type ItemFormProps = { item?: Item; currencySymbol?: string };
 
 export function ItemForm({ item }: ItemFormProps) {
-  const t = useTranslations();
+  const { t } = useTranslation();
   const router = useRouter();
   const [notes, setNotes] = useState(item?.notes ?? "");
   const [title, setTitle] = useState(item?.title ?? "");
+  const [description, setDescription] = useState(item?.description ?? "");
   const [price, setPrice] = useState(item?.price?.toString() ?? "");
+  const [wholesalePrice, setWholesalePrice] = useState(
+    item?.wholesalePrice?.toString() ?? "",
+  );
+  const [minWholesaleQty, setMinWholesaleQty] = useState(
+    item?.minWholesaleQty?.toString() ?? "",
+  );
   const [sizes, setSizes] = useState((item?.sizes ?? []).join(", "));
   const [quantity, setQuantity] = useState(item?.quantity?.toString() ?? "");
   const [material, setMaterial] = useState(item?.material ?? "");
+  const [origin, setOrigin] = useState(item?.origin ?? "");
   const [category, setCategory] = useState(item?.category ?? "");
+  const [subcategory, setSubcategory] = useState(item?.subcategory ?? "");
   const [condition, setCondition] = useState(item?.condition ?? "");
+  const [tags, setTags] = useState((item?.tags ?? []).join(", "));
+  const [collections, setCollections] = useState((item?.collections ?? []).join(", "));
   const [status, setStatus] = useState(item?.status ?? "in_stock");
-  const [photos, setPhotos] = useState<string[]>(item?.photos ?? []);
+  const [published, setPublished] = useState(item?.published ?? false);
+  const [variants, setVariants] = useState<ProductVariant[]>(
+    item?.variants?.length
+      ? item.variants.map((variant) => ({
+          ...variant,
+          id: asUuid(variant.id),
+        }))
+      : [emptyVariant()],
+  );
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [touched, setTouched] = useState({
     title: Boolean(item),
     price: Boolean(item),
@@ -42,7 +85,6 @@ export function ItemForm({ item }: ItemFormProps) {
   });
 
   const parsed = useMemo(() => parseNotes(notes), [notes]);
-
   const stackedTitle = touched.title ? title : parsed.title;
   const stackedPrice = touched.price ? price : parsed.price?.toString() ?? "";
   const stackedSizes = touched.sizes ? sizes : parsed.sizes.join(", ");
@@ -53,70 +95,117 @@ export function ItemForm({ item }: ItemFormProps) {
   const stackedCategory = touched.category ? category : parsed.category ?? "";
   const stackedCondition = touched.condition ? condition : parsed.condition ?? "";
 
-  async function onFiles(fileList: FileList | null) {
-    if (!fileList || fileList.length === 0) return;
-    const data = new FormData();
-    for (const file of Array.from(fileList)) data.append("files", file);
-    const response = await fetch("/api/v1/uploads", { method: "POST", body: data });
-    const payload = (await response.json()) as { urls?: string[]; error?: string };
-    if (!response.ok) {
-      setError(payload.error || t("form.uploadError"));
-      return;
-    }
-    setPhotos((current) => [...current, ...(payload.urls ?? [])]);
+  const draftLike: Item = {
+    id: item?.id ?? "draft",
+    code: item?.code ?? "",
+    title: stackedTitle || t("form.untitled"),
+    notes,
+    description,
+    price: stackedPrice ? Number(stackedPrice) : null,
+    wholesalePrice: wholesalePrice ? Number(wholesalePrice) : null,
+    minWholesaleQty: minWholesaleQty ? Number(minWholesaleQty) : null,
+    sizes: splitCsv(stackedSizes),
+    quantity: stackedQuantity ? Number(stackedQuantity) : null,
+    material: stackedMaterial || null,
+    origin: origin || null,
+    category: (stackedCategory || null) as Item["category"],
+    subcategory: subcategory || null,
+    condition: (stackedCondition || null) as Item["condition"],
+    status,
+    tags: splitCsv(tags),
+    collections: splitCsv(collections),
+    published,
+    publishedAt: item?.publishedAt ?? null,
+    photos: variants.flatMap((variant) => variant.photos),
+    videos: variants.flatMap((variant) => variant.videos),
+    variants,
+    createdAt: item?.createdAt ?? new Date().toISOString(),
+    updatedAt: item?.updatedAt ?? new Date().toISOString(),
+  };
+  const missing = missingFields(draftLike);
+
+  function patchVariant(id: string, patch: Partial<ProductVariant>) {
+    setVariants((current) =>
+      current.map((variant) => (variant.id === id ? { ...variant, ...patch } : variant)),
+    );
   }
 
-  async function onSubmit(event: React.FormEvent) {
-    event.preventDefault();
+  async function save(nextPublished = published) {
     setPending(true);
     setError("");
-
     const body = {
       notes,
       title: stackedTitle,
+      description,
       price: stackedPrice ? Number(stackedPrice) : null,
-      sizes: stackedSizes
-        .split(",")
-        .map((size) => size.trim())
-        .filter(Boolean),
+      wholesalePrice: wholesalePrice ? Number(wholesalePrice) : null,
+      minWholesaleQty: minWholesaleQty ? Number(minWholesaleQty) : null,
+      sizes: splitCsv(stackedSizes),
       quantity: stackedQuantity ? Number(stackedQuantity) : null,
       material: stackedMaterial || null,
+      origin: origin || null,
       category: stackedCategory || null,
+      subcategory: subcategory || null,
       condition: stackedCondition || null,
+      tags: splitCsv(tags),
+      collections: splitCsv(collections),
       status,
-      photos,
+      published: nextPublished,
+      variants: variants.map((variant) => ({
+        ...variant,
+        color: variant.color?.trim() || null,
+        photos: variant.photos.map((url) => persistableUrl(url)),
+        videos: variant.videos.map((url) => persistableUrl(url)),
+      })),
+      photos: variants.flatMap((variant) => variant.photos.map((url) => persistableUrl(url))),
+      videos: variants.flatMap((variant) => variant.videos.map((url) => persistableUrl(url))),
     };
-
     const response = await fetch(item ? `/api/v1/items/${item.id}` : "/api/v1/items", {
       method: item ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-
     const payload = (await response.json()) as { item?: Item; error?: string };
     setPending(false);
-
     if (!response.ok || !payload.item) {
       setError(payload.error || t("form.saveError"));
       return;
     }
-
     router.push("/studio");
-    router.refresh();
   }
 
   async function onDelete() {
     if (!item) return;
-    if (!confirm(t("form.confirmRemove"))) return;
     setPending(true);
     await fetch(`/api/v1/items/${item.id}`, { method: "DELETE" });
     router.push("/studio");
-    router.refresh();
   }
 
+  const uploadLabels = {
+    remove: t("form.removePhoto"),
+    noPhoto: t("form.noPhoto"),
+    urlLabel: t("form.urlLabel"),
+    urlPlaceholder: t("form.urlPlaceholder"),
+    urlAdd: t("form.urlAdd"),
+    urlHelp: t("form.urlHelp"),
+    urlExamplesTitle: t("form.urlExamplesTitle"),
+    urlExamples: [
+      t("form.urlExample1"),
+      t("form.urlExample2"),
+      t("form.urlExample3"),
+    ],
+    urlInvalid: t("form.urlInvalid"),
+  };
+
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="space-y-4 rounded-[28px] bg-paper-2 p-6 shadow-sm">
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        void save(false);
+      }}
+      className="space-y-4 pb-4"
+    >
+      <section className="space-y-4 rounded-[28px] bg-paper-2 p-5 shadow-sm">
         <div>
           <p className="text-sm font-medium text-muted">{t("form.messyIn")}</p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">
@@ -124,61 +213,83 @@ export function ItemForm({ item }: ItemFormProps) {
           </h1>
           <p className="mt-2 max-w-md text-muted">{t("form.help")}</p>
         </div>
-
-        <label className="block cursor-pointer rounded-[24px] border border-dashed border-rule bg-paper px-6 py-10 text-center">
-          <span className="text-lg font-semibold">{t("form.addPhotos")}</span>
-          <span className="mt-2 block text-sm text-muted">{t("form.photoHint")}</span>
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            multiple
-            className="hidden"
-            onChange={(event) => onFiles(event.target.files)}
-          />
-        </label>
-
-        {photos.length > 0 ? (
-          <div className="grid grid-cols-3 gap-3">
-            {photos.map((src) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => setPhotos((current) => current.filter((photo) => photo !== src))}
-                className="group relative"
-                title={t("form.removePhoto")}
-              >
-                <CoverPhoto
-                  src={src}
-                  alt=""
-                  className="aspect-square"
-                  emptyLabel={t("form.noPhoto")}
-                />
-                <span className="absolute inset-x-2 bottom-2 hidden rounded-[10px] bg-white/90 py-1 text-xs font-medium group-hover:block">
-                  {t("form.removePhoto")}
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-
-        <div>
-          <label htmlFor="notes" className="text-sm font-medium text-muted">
-            {t("form.notes")}
-          </label>
+        <label className="block">
+          <span className="text-sm font-medium text-muted">{t("form.notes")}</span>
           <textarea
-            id="notes"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            rows={5}
+            rows={4}
             placeholder={t("form.notesPlaceholder")}
             className="field mt-2"
           />
-        </div>
+        </label>
+        {missing.length > 0 ? (
+          <div className="rounded-[16px] bg-amber-50 px-4 py-3 text-sm">
+            <p className="font-medium">{t("form.missingTitle")}</p>
+            <p className="mt-1 text-muted">
+              {missing.map((field) => t(`form.missing.${field}`)).join(" · ")}
+            </p>
+          </div>
+        ) : (
+          <p className="text-sm text-olive">{t("form.ready")}</p>
+        )}
       </section>
 
-      <section className="space-y-5 rounded-[28px] bg-paper-2 p-6 shadow-sm">
-        <p className="text-sm font-medium text-muted">{t("form.stacked")}</p>
+      <section className="space-y-4 rounded-[28px] bg-paper-2 p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold">{t("form.variants")}</h2>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setVariants((current) => [...current, emptyVariant()])}
+          >
+            {t("form.addColor")}
+          </button>
+        </div>
+        <p className="text-sm text-muted">{t("form.variantsHelp")}</p>
+        {variants.map((variant, index) => (
+          <div key={variant.id} className="space-y-3 rounded-[20px] bg-paper p-4">
+            <div className="flex items-center gap-2">
+              <input
+                value={variant.color ?? ""}
+                onChange={(event) => patchVariant(variant.id, { color: event.target.value })}
+                className="field"
+                placeholder={t("form.colorPlaceholder")}
+              />
+              {variants.length > 1 ? (
+                <button
+                  type="button"
+                  className="btn btn-secondary shrink-0 text-sold"
+                  onClick={() =>
+                    setVariants((current) => current.filter((entry) => entry.id !== variant.id))
+                  }
+                >
+                  {t("form.removeColor")}
+                </button>
+              ) : null}
+            </div>
+            <p className="text-xs font-medium text-muted">
+              {t("form.colorN", { n: index + 1 })}
+            </p>
+            <MediaPicker
+              items={[
+                ...slotsFrom(variant.photos, "image"),
+                ...slotsFrom(variant.videos, "video"),
+              ]}
+              onChange={(slots) =>
+                patchVariant(variant.id, {
+                  photos: slots.filter((slot) => slot.kind === "image").map((slot) => slot.url),
+                  videos: slots.filter((slot) => slot.kind === "video").map((slot) => slot.url),
+                })
+              }
+              labels={uploadLabels}
+            />
+          </div>
+        ))}
+      </section>
 
+      <section className="space-y-4 rounded-[28px] bg-paper-2 p-5 shadow-sm">
+        <p className="text-sm font-medium text-muted">{t("form.stacked")}</p>
         <Field label={t("form.title")}>
           <input
             value={stackedTitle}
@@ -190,8 +301,16 @@ export function ItemForm({ item }: ItemFormProps) {
             placeholder={t("form.titlePlaceholder")}
           />
         </Field>
-
-        <div className="grid grid-cols-2 gap-4">
+        <Field label={t("form.description")}>
+          <textarea
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            rows={3}
+            className="field"
+            placeholder={t("form.descriptionPlaceholder")}
+          />
+        </Field>
+        <div className="grid grid-cols-2 gap-3">
           <Field label={t("form.price")}>
             <input
               value={stackedPrice}
@@ -204,6 +323,24 @@ export function ItemForm({ item }: ItemFormProps) {
               placeholder="1500"
             />
           </Field>
+          <Field label={t("form.wholesalePrice")}>
+            <input
+              value={wholesalePrice}
+              onChange={(event) => setWholesalePrice(event.target.value)}
+              className="field"
+              inputMode="numeric"
+            />
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label={t("form.minWholesaleQty")}>
+            <input
+              value={minWholesaleQty}
+              onChange={(event) => setMinWholesaleQty(event.target.value)}
+              className="field"
+              inputMode="numeric"
+            />
+          </Field>
           <Field label={t("form.quantity")}>
             <input
               value={stackedQuantity}
@@ -213,11 +350,9 @@ export function ItemForm({ item }: ItemFormProps) {
               }}
               className="field"
               inputMode="numeric"
-              placeholder="3"
             />
           </Field>
         </div>
-
         <Field label={t("form.sizes")}>
           <input
             value={stackedSizes}
@@ -229,7 +364,6 @@ export function ItemForm({ item }: ItemFormProps) {
             placeholder="M, L"
           />
         </Field>
-
         <Field label={t("form.material")}>
           <input
             value={stackedMaterial}
@@ -241,7 +375,14 @@ export function ItemForm({ item }: ItemFormProps) {
             placeholder={t("form.materialPlaceholder")}
           />
         </Field>
-
+        <Field label={t("form.origin")}>
+          <input
+            value={origin}
+            onChange={(event) => setOrigin(event.target.value)}
+            className="field"
+            placeholder={t("form.originPlaceholder")}
+          />
+        </Field>
         <Field label={t("form.kind")}>
           <select
             value={stackedCategory}
@@ -259,7 +400,13 @@ export function ItemForm({ item }: ItemFormProps) {
             ))}
           </select>
         </Field>
-
+        <Field label={t("form.subcategory")}>
+          <input
+            value={subcategory}
+            onChange={(event) => setSubcategory(event.target.value)}
+            className="field"
+          />
+        </Field>
         <Field label={t("form.condition")}>
           <select
             value={stackedCondition}
@@ -277,7 +424,22 @@ export function ItemForm({ item }: ItemFormProps) {
             ))}
           </select>
         </Field>
-
+        <Field label={t("form.tags")}>
+          <input
+            value={tags}
+            onChange={(event) => setTags(event.target.value)}
+            className="field"
+            placeholder={t("form.tagsPlaceholder")}
+          />
+        </Field>
+        <Field label={t("form.collections")}>
+          <input
+            value={collections}
+            onChange={(event) => setCollections(event.target.value)}
+            className="field"
+            placeholder={t("form.collectionsPlaceholder")}
+          />
+        </Field>
         <Field label={t("form.status")}>
           <select
             value={status}
@@ -291,32 +453,58 @@ export function ItemForm({ item }: ItemFormProps) {
             ))}
           </select>
         </Field>
-
+        <label className="flex items-center gap-3 rounded-[16px] bg-paper px-4 py-3">
+          <input
+            type="checkbox"
+            checked={published}
+            onChange={(event) => setPublished(event.target.checked)}
+          />
+          <span className="text-sm font-medium">{t("form.published")}</span>
+        </label>
         {error ? <p className="text-sm text-sold">{error}</p> : null}
-
-        <div className="flex flex-wrap gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={pending}
-            className="rounded-[16px] bg-ink px-5 py-3 font-medium text-white disabled:opacity-60"
-          >
-            {pending
-              ? t("form.saving")
-              : item
-                ? t("form.save")
-                : t("form.putInCatalog")}
+        <div className="flex flex-wrap gap-2 pt-1">
+          <button type="submit" disabled={pending} className="btn btn-secondary">
+            {pending ? t("form.saving") : t("form.saveDraft")}
           </button>
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => void save(true)}
+            className="btn btn-primary"
+          >
+            {t("form.publish")}
+          </button>
+          {item?.published ? (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => void save(false)}
+              className="btn btn-secondary"
+            >
+              {t("form.unpublish")}
+            </button>
+          ) : null}
           {item ? (
             <button
               type="button"
-              onClick={onDelete}
-              className="rounded-[16px] bg-paper px-5 py-3 font-medium text-sold"
+              onClick={() => setConfirmDelete(true)}
+              className="btn btn-secondary text-sold"
             >
               {t("form.remove")}
             </button>
           ) : null}
         </div>
       </section>
+      <ConfirmDialog
+        open={confirmDelete}
+        title={t("form.remove")}
+        body={t("form.confirmRemove")}
+        confirmLabel={t("form.remove")}
+        cancelLabel={t("form.cancel")}
+        pending={pending}
+        onCancel={() => setConfirmDelete(false)}
+        onConfirm={() => void onDelete()}
+      />
     </form>
   );
 }

@@ -32,6 +32,7 @@ export type Suggestion = {
 
 export type Item = {
   id: string;
+  shopId?: string;
   code: string;
   title: string;
   notes: string;
@@ -50,6 +51,7 @@ export type Item = {
   tags: string[];
   collections: string[];
   published: boolean;
+  publishedAt: string | null;
   photos: string[];
   videos: string[];
   variants: ProductVariant[];
@@ -58,15 +60,26 @@ export type Item = {
 };
 
 export type Shop = {
+  id: string;
+  slug: string;
   name: string;
   tagline: string;
   location: string;
   whatsapp: string;
   currency: string;
   currencySymbol: string;
+  logoUrl: string;
+  coverUrl: string;
 };
 
-export type BoardElementType = "media" | "product" | "note" | "section" | "label";
+export type BoardElementType =
+  | "media"
+  | "product"
+  | "note"
+  | "section"
+  | "label"
+  | "collection"
+  | "group";
 
 export type BoardElement = {
   id: string;
@@ -77,12 +90,15 @@ export type BoardElement = {
   height: number;
   zIndex: number;
   productId?: string;
+  mediaId?: string;
   mediaUrl?: string;
   mediaKind?: "image" | "video";
   text?: string;
   title?: string;
   color?: string;
   sectionId?: string;
+  groupId?: string;
+  memberIds?: string[];
 };
 
 export type BoardCamera = {
@@ -94,6 +110,8 @@ export type BoardCamera = {
 export type BoardSnapshot = {
   camera: BoardCamera;
   elements: BoardElement[];
+  /** Optimistic concurrency token from board_documents.version */
+  version: number;
 };
 
 export type HistoryEntry = {
@@ -141,6 +159,24 @@ export type ItemFilters = {
   category?: Category | "all";
   size?: string | "all";
   published?: boolean;
+  missing?: boolean;
   q?: string;
   collection?: string;
+};
+
+export type ShopInput = {
+  name?: string;
+  tagline?: string;
+  location?: string;
+  whatsapp?: string;
+  currency?: string;
+  currencySymbol?: string;
+  logoUrl?: string;
+  coverUrl?: string;
+};
+
+export type BulkItemInput = {
+  ids: string[];
+  published?: boolean;
+  status?: Status;
 };

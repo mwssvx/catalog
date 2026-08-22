@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #eef1f6;
+  --paper-2: #ffffff;
+  --ink: #1c1f26;
+  --ink-soft: #2a303a;
+  --muted: #667085;
+  --rule: #d8dde8;
+  --olive: #2f6fed;
+  --olive-deep: #2458c4;
+  --sold: #e14b40;
+  --font-jakarta: "Manrope", system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-olive: var(--olive);
+  --color-sold: var(--sold);
+  --font-sans: var(--font-jakarta);
+  --radius-box: 1.5rem;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100%;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+}
+
+.field:focus {
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olive) 16%, transparent);
+}
+
+/* Solid controls — never fade to invisible on hover/active */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 14px;
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    border-color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  background: var(--rule) !important;
+  color: var(--muted) !important;
+  border-color: var(--rule) !important;
+  opacity: 1;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.btn-primary:hover {
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
+  color: #fff;
+}
+
+.btn-primary:active {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--paper-2);
+  color: var(--ink);
+  border-color: var(--rule);
+}
+
+.btn-secondary:hover {
+  background: #f4f6fa;
+  color: var(--ink);
+  border-color: #c9d0dd;
+}
+
+.btn-secondary:active {
+  background: #e8ecf3;
+  color: var(--ink);
+}
+
+.btn-nav {
+  background: transparent;
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.btn-nav:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+  border-color: var(--rule);
+}
+
+.btn-nav:active {
+  background: #e8ecf3;
+  color: var(--ink);
+}
+
+.btn-nav.is-active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.btn-nav.is-active:hover,
+.btn-nav.is-active:active {
+  background: var(--ink-soft);
+  color: #fff;
+  border-color: var(--ink-soft);
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: #fff;
+  border-color: #1fbe59;
+}
+
+.btn-whatsapp:hover {
+  background: #1fbe59;
+  color: #fff;
+}
+
+.btn-whatsapp:active {
+  background: #189e4a;
+  color: #fff;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    border-color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip:hover {
+  background: #f4f6fa;
+  color: var(--ink);
+  border-color: #c9d0dd;
+}
+
+.chip:active {
+  background: #e8ecf3;
+  color: var(--ink);
+}
+
+.chip.is-active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.chip.is-active:hover,
+.chip.is-active:active {
+  background: var(--ink-soft);
+  color: #fff;
+  border-color: var(--ink-soft);
+}

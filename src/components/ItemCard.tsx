@@ -1,10 +1,10 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslation } from "react-i18next";
 import { Link } from "@/i18n/navigation";
 import { CoverPhoto } from "@/components/CoverPhoto";
 import { formatPrice } from "@/lib/catalog/format";
 import type { Item } from "@/lib/catalog/types";
 
-export async function ItemCard({
+export function ItemCard({
   item,
   currencySymbol,
   href,
@@ -13,7 +13,7 @@ export async function ItemCard({
   currencySymbol: string;
   href?: string;
 }) {
-  const t = await getTranslations();
+  const { t } = useTranslation();
   const destination = href ?? `/item/${item.id}`;
   const statusLabel = t(`status.${item.status}`);
 
@@ -41,14 +41,16 @@ export async function ItemCard({
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
-          {(item.sizes.length > 0 ? item.sizes : [t("item.sizeUnknown")]).map((size) => (
-            <span
-              key={size}
-              className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted"
-            >
-              {size}
-            </span>
-          ))}
+          {(item.sizes.length > 0 ? item.sizes : [t("item.sizeUnknown")]).map(
+            (size) => (
+              <span
+                key={size}
+                className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted"
+              >
+                {size}
+              </span>
+            ),
+          )}
           {item.quantity != null ? (
             <span className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted">
               {t("item.left", { count: item.quantity })}

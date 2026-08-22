@@ -19,6 +19,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -55,7 +56,7 @@ yarn-error.log*
 /public/uploads/*
 !/public/uploads/.gitkeep
 
-# vercel
+# vercel / railway local
 .vercel
 
 # typescript

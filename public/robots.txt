@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /ky
+Allow: /item/
+Allow: /ky/item/
+Allow: /privacy
+Allow: /terms
+Allow: /ky/privacy
+Allow: /ky/terms
+Disallow: /studio
+Disallow: /ky/studio
+Disallow: /api/
+
+Sitemap: /sitemap.xml

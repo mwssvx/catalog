@@ -1,0 +1,53 @@
+{
+  "id": "example-mixed-rack",
+  "description": "Two shirt colors + one unrelated selfie",
+  "locale": "ru",
+  "media": [
+    {
+      "path": "samples/shirt-blue-front.jpg",
+      "kind": "image",
+      "labels": {
+        "isClothing": true,
+        "isPersonalOrUnrelated": false,
+        "clothingType": "shirt",
+        "visibleColor": "blue",
+        "productModelId": "shirt-a",
+        "colorVariantId": "shirt-a-blue"
+      }
+    },
+    {
+      "path": "samples/shirt-red-front.jpg",
+      "kind": "image",
+      "labels": {
+        "isClothing": true,
+        "isPersonalOrUnrelated": false,
+        "clothingType": "shirt",
+        "visibleColor": "red",
+        "productModelId": "shirt-a",
+        "colorVariantId": "shirt-a-red"
+      }
+    },
+    {
+      "path": "samples/selfie.jpg",
+      "kind": "image",
+      "labels": {
+        "isClothing": false,
+        "isPersonalOrUnrelated": true,
+        "productModelId": "unrelated",
+        "colorVariantId": "unrelated"
+      }
+    }
+  ],
+  "expected": {
+    "productCount": 1,
+    "unrelated": ["samples/selfie.jpg"],
+    "mustSeparate": [],
+    "mustMergeModels": [
+      ["samples/shirt-blue-front.jpg", "samples/shirt-red-front.jpg"]
+    ]
+  },
+  "scoring": {
+    "preferSeparate": true,
+    "neverInfer": ["price", "size", "quantity", "origin", "material"]
+  }
+}

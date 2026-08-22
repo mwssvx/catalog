@@ -1,87 +1,96 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import { CATEGORIES } from "@/lib/catalog/types";
 
 type CatalogFiltersProps = {
   status: string;
   category: string;
   size: string;
+  q?: string;
   sizes: string[];
   counts: { all: number; available: number };
 };
 
 function chipClass(active: boolean) {
-  return active
-    ? "rounded-[14px] bg-ink px-3 py-2 text-sm font-medium text-white"
-    : "rounded-[14px] bg-paper-2 px-3 py-2 text-sm font-medium text-muted shadow-sm hover:text-ink";
+  return active ? "chip is-active min-h-10" : "chip min-h-10";
 }
 
-function query(
-  next: { status?: string; category?: string; size?: string },
-  current: CatalogFiltersProps,
-) {
-  const status = next.status ?? current.status;
-  const category = next.category ?? current.category;
-  const size = next.size ?? current.size;
-  const params: Record<string, string> = {};
-  if (status && status !== "available") params.status = status;
-  if (category && category !== "all") params.category = category;
-  if (size && size !== "all") params.size = size;
-  return params;
-}
+export function CatalogFilters(props: CatalogFiltersProps) {
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-export async function CatalogFilters(props: CatalogFiltersProps) {
-  const t = await getTranslations();
+  function apply(next: {
+    status?: string;
+    category?: string;
+    size?: string;
+  }) {
+    const status = next.status ?? props.status;
+    const category = next.category ?? props.category;
+    const size = next.size ?? props.size;
+    const params = new URLSearchParams();
+    if (status && status !== "available") params.set("status", status);
+    if (category && category !== "all") params.set("category", category);
+    if (size && size !== "all") params.set("size", size);
+    const q = (props.q ?? searchParams.get("q") ?? "").trim();
+    if (q) params.set("q", q);
+    setSearchParams(params, { replace: true });
+  }
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-2">
-        <Link
-          href={{ pathname: "/", query: query({ status: "available" }, props) }}
+        <button
+          type="button"
+          onClick={() => apply({ status: "available" })}
           className={chipClass(props.status === "available")}
         >
           {t("home.available", { count: props.counts.available })}
-        </Link>
-        <Link
-          href={{ pathname: "/", query: query({ status: "all" }, props) }}
+        </button>
+        <button
+          type="button"
+          onClick={() => apply({ status: "all" })}
           className={chipClass(props.status === "all")}
         >
           {t("home.allItems", { count: props.counts.all })}
-        </Link>
+        </button>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Link
-          href={{ pathname: "/", query: query({ category: "all" }, props) }}
+        <button
+          type="button"
+          onClick={() => apply({ category: "all" })}
           className={chipClass(props.category === "all")}
         >
           {t("home.allKinds")}
-        </Link>
+        </button>
         {CATEGORIES.map((category) => (
-          <Link
+          <button
             key={category}
-            href={{ pathname: "/", query: query({ category }, props) }}
+            type="button"
+            onClick={() => apply({ category })}
             className={chipClass(props.category === category)}
           >
             {t(`category.${category}`)}
-          </Link>
+          </button>
         ))}
       </div>
       {props.sizes.length > 0 ? (
         <div className="flex flex-wrap gap-2">
-          <Link
-            href={{ pathname: "/", query: query({ size: "all" }, props) }}
+          <button
+            type="button"
+            onClick={() => apply({ size: "all" })}
             className={chipClass(props.size === "all")}
           >
             {t("home.anySize")}
-          </Link>
+          </button>
           {props.sizes.map((size) => (
-            <Link
+            <button
               key={size}
-              href={{ pathname: "/", query: query({ size }, props) }}
+              type="button"
+              onClick={() => apply({ size })}
               className={chipClass(props.size === size)}
             >
               {size}
-            </Link>
+            </button>
           ))}
         </div>
       ) : null}

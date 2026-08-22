@@ -1,5 +1,3 @@
-"use client";
-
 type CoverPhotoProps = {
   src?: string;
   alt: string;
@@ -7,6 +5,7 @@ type CoverPhotoProps = {
   sold?: boolean;
   soldLabel?: string;
   emptyLabel?: string;
+  priority?: boolean;
 };
 
 export function CoverPhoto({
@@ -16,14 +15,16 @@ export function CoverPhoto({
   sold = false,
   soldLabel = "Sold",
   emptyLabel,
+  priority = false,
 }: CoverPhotoProps) {
   return (
     <div className={`relative overflow-hidden rounded-[22px] bg-paper ${className}`}>
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
           className={`h-full w-full object-cover ${sold ? "grayscale contrast-75" : ""}`}
         />
       ) : (

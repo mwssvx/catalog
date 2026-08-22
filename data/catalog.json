@@ -255,11 +255,68 @@
     },
     "elements": [
       {
+        "id": "82c47955-7da8-44e0-b0d7-a58b9141318c",
+        "type": "section",
+        "title": "Бөлүм",
+        "x": 683.2595123783392,
+        "y": 488.1252135692237,
+        "width": 736,
+        "height": 648,
+        "zIndex": 0,
+        "color": "#dbe7ff"
+      },
+      {
+        "id": "83c7d2f6-b286-49c8-b92d-6856e25ef455",
+        "type": "section",
+        "title": "Бөлүм",
+        "x": 669.9256114549537,
+        "y": 369.40476680951093,
+        "width": 736,
+        "height": 648,
+        "zIndex": 0,
+        "color": "#dbe7ff"
+      },
+      {
+        "id": "2ddaccab-1368-4033-9f3b-9f4ff3c34fb5",
+        "type": "section",
+        "title": "Бөлүм",
+        "x": 560.3085422359576,
+        "y": 128.86296609860022,
+        "width": 736,
+        "height": 648,
+        "zIndex": 0,
+        "color": "#dbe7ff"
+      },
+      {
+        "id": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20",
+        "type": "section",
+        "title": "Бөлүм",
+        "x": 818.4996171744015,
+        "y": 73.15687383873679,
+        "width": 664,
+        "height": 552,
+        "zIndex": 0,
+        "color": "#dbe7ff",
+        "sectionId": "82c47955-7da8-44e0-b0d7-a58b9141318c"
+      },
+      {
+        "id": "5113b2d7-6e1d-4767-b060-d1f459ba1c85",
+        "type": "section",
+        "title": "Бөлүм",
+        "x": 602.0525477818965,
+        "y": -70.5042359738915,
+        "width": 592,
+        "height": 456,
+        "zIndex": 0,
+        "color": "#dbe7ff",
+        "sectionId": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20"
+      },
+      {
         "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
         "type": "section",
         "title": "Бөлүм",
-        "x": 36,
-        "y": 8,
+        "x": 786.6521083787402,
+        "y": 28.731779508785674,
         "width": 322,
         "height": 406,
         "zIndex": 0,
@@ -269,8 +326,8 @@
         "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
         "type": "section",
         "title": "Бөлүм",
-        "x": 36,
-        "y": 8,
+        "x": 884.419282258847,
+        "y": 258.83016778551644,
         "width": 322,
         "height": 406,
         "zIndex": 0,
@@ -280,8 +337,8 @@
         "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
         "type": "section",
         "title": "Бөлүм",
-        "x": 80,
-        "y": 80,
+        "x": 814.8707057077896,
+        "y": 123.62311938306985,
         "width": 520,
         "height": 360,
         "zIndex": 0,
@@ -291,18 +348,19 @@
         "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
         "type": "section",
         "title": "Раздел",
-        "x": 80,
-        "y": 80,
+        "x": 50.54138168089217,
+        "y": 182.91689475168016,
         "width": 520,
         "height": 360,
         "zIndex": 0,
-        "color": "#dbe7ff"
+        "color": "#dbe7ff",
+        "sectionId": "5113b2d7-6e1d-4767-b060-d1f459ba1c85"
       },
       {
         "id": "el-seed-cotton-shirt",
         "type": "product",
-        "x": 72,
-        "y": 72,
+        "x": -141.81862552143429,
+        "y": 111.23755064082673,
         "width": 250,
         "height": 310,
         "zIndex": 1,
@@ -312,8 +370,8 @@
       {
         "id": "el-seed-jeans",
         "type": "product",
-        "x": 352,
-        "y": 72,
+        "x": 732.6252830862472,
+        "y": 398.8356179825229,
         "width": 250,
         "height": 310,
         "zIndex": 2,
@@ -2155,6 +2213,2020 @@
             "type": "note",
             "x": 66.68977408000009,
             "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 8,
+            "text": "Заметка"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "seed-cotton-shirt",
+          "code": "T101",
+          "title": "Хлопковая рубашка",
+          "notes": "хлопковая рубашка M/L, 1500 сом, осталось 4, почти новая",
+          "description": "",
+          "price": 1500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "quantity": 4,
+          "material": "хлопок",
+          "origin": null,
+          "category": "tops",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [
+            "Бөлүм"
+          ],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-cotton-shirt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-01T10:00:00.000Z",
+          "updatedAt": "2026-08-01T10:00:00.000Z"
+        },
+        {
+          "id": "seed-jeans",
+          "code": "B101",
+          "title": "Широкие джинсы",
+          "notes": "джинсы 32, 1800 сом, 2 шт, хлопок, хорошее",
+          "description": "",
+          "price": 1800,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "32"
+          ],
+          "quantity": 2,
+          "material": "хлопок",
+          "origin": null,
+          "category": "bottoms",
+          "subcategory": null,
+          "condition": "good",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-jeans-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-02T10:00:00.000Z",
+          "updatedAt": "2026-08-02T10:00:00.000Z"
+        },
+        {
+          "id": "seed-coat",
+          "code": "J101",
+          "title": "Шерстяное пальто",
+          "notes": "пальто M, 4500 сом, шерсть, новое, осталось 1",
+          "description": "",
+          "price": 4500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 1,
+          "material": "шерсть",
+          "origin": null,
+          "category": "outerwear",
+          "subcategory": null,
+          "condition": "new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-coat-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-03T10:00:00.000Z",
+          "updatedAt": "2026-08-03T10:00:00.000Z"
+        },
+        {
+          "id": "seed-dress",
+          "code": "D101",
+          "title": "Чёрное платье",
+          "notes": "платье S/M, 2200 сом, вискоза, новое, отложено",
+          "description": "",
+          "price": 2200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "quantity": 1,
+          "material": "вискоза",
+          "origin": null,
+          "category": "dresses",
+          "subcategory": null,
+          "condition": "new",
+          "status": "reserved",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-dress-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-04T10:00:00.000Z",
+          "updatedAt": "2026-08-04T10:00:00.000Z"
+        },
+        {
+          "id": "seed-sneakers",
+          "code": "S101",
+          "title": "Белые кроссовки",
+          "notes": "кроссовки 42, 1200 сом, продано",
+          "description": "",
+          "price": 1200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "42"
+          ],
+          "quantity": 0,
+          "material": null,
+          "origin": null,
+          "category": "shoes",
+          "subcategory": null,
+          "condition": "worn",
+          "status": "sold",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-sneakers-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-05T10:00:00.000Z",
+          "updatedAt": "2026-08-05T10:00:00.000Z"
+        },
+        {
+          "id": "seed-belt",
+          "code": "A101",
+          "title": "Кожаный ремень",
+          "notes": "ремень M, 700 сом, кожа, почти новый, 3 шт",
+          "description": "",
+          "price": 700,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 3,
+          "material": "кожа",
+          "origin": null,
+          "category": "accessories",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-belt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-06T10:00:00.000Z",
+          "updatedAt": "2026-08-06T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "fdf76051-8787-4745-bb2d-e0ac908475da",
+      "label": "Board: section",
+      "at": "2026-08-18T11:23:50.821Z",
+      "board": {
+        "camera": {
+          "zoom": 0.35271936000000015,
+          "x": 20.83366341999991,
+          "y": -10.832475200000033
+        },
+        "elements": [
+          {
+            "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 786.6521083787402,
+            "y": 28.731779508785674,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 884.419282258847,
+            "y": 258.83016778551644,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 814.8707057077896,
+            "y": 123.62311938306985,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
+            "type": "section",
+            "title": "Раздел",
+            "x": 50.54138168089217,
+            "y": 182.91689475168016,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "el-seed-cotton-shirt",
+            "type": "product",
+            "x": -141.81862552143429,
+            "y": 111.23755064082673,
+            "width": 250,
+            "height": 310,
+            "zIndex": 1,
+            "productId": "seed-cotton-shirt",
+            "sectionId": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f"
+          },
+          {
+            "id": "el-seed-jeans",
+            "type": "product",
+            "x": 352,
+            "y": 72,
+            "width": 250,
+            "height": 310,
+            "zIndex": 2,
+            "productId": "seed-jeans"
+          },
+          {
+            "id": "el-seed-coat",
+            "type": "product",
+            "x": 602.0762456021695,
+            "y": 112.10137478702615,
+            "width": 250,
+            "height": 310,
+            "zIndex": 3,
+            "productId": "seed-coat"
+          },
+          {
+            "id": "el-seed-dress",
+            "type": "product",
+            "x": 615.907661887343,
+            "y": 423.0448434131882,
+            "width": 250,
+            "height": 310,
+            "zIndex": 4,
+            "productId": "seed-dress"
+          },
+          {
+            "id": "el-seed-sneakers",
+            "type": "product",
+            "x": 72,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 5,
+            "productId": "seed-sneakers"
+          },
+          {
+            "id": "el-seed-belt",
+            "type": "product",
+            "x": 352,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 6,
+            "productId": "seed-belt"
+          },
+          {
+            "id": "04597aa0-5a91-432b-b130-45ed8d8cdb6f",
+            "type": "note",
+            "x": 66.68977408000009,
+            "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 7,
+            "text": "Заметка"
+          },
+          {
+            "id": "7bcbff54-52e8-434b-9f6f-e48a939f7372",
+            "type": "note",
+            "x": 66.7008487485411,
+            "y": 69.7493645933126,
+            "width": 220,
+            "height": 140,
+            "zIndex": 8,
+            "text": "Заметка"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "seed-cotton-shirt",
+          "code": "T101",
+          "title": "Хлопковая рубашка",
+          "notes": "хлопковая рубашка M/L, 1500 сом, осталось 4, почти новая",
+          "description": "",
+          "price": 1500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "quantity": 4,
+          "material": "хлопок",
+          "origin": null,
+          "category": "tops",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [
+            "Бөлүм"
+          ],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-cotton-shirt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-01T10:00:00.000Z",
+          "updatedAt": "2026-08-01T10:00:00.000Z"
+        },
+        {
+          "id": "seed-jeans",
+          "code": "B101",
+          "title": "Широкие джинсы",
+          "notes": "джинсы 32, 1800 сом, 2 шт, хлопок, хорошее",
+          "description": "",
+          "price": 1800,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "32"
+          ],
+          "quantity": 2,
+          "material": "хлопок",
+          "origin": null,
+          "category": "bottoms",
+          "subcategory": null,
+          "condition": "good",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-jeans-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-02T10:00:00.000Z",
+          "updatedAt": "2026-08-02T10:00:00.000Z"
+        },
+        {
+          "id": "seed-coat",
+          "code": "J101",
+          "title": "Шерстяное пальто",
+          "notes": "пальто M, 4500 сом, шерсть, новое, осталось 1",
+          "description": "",
+          "price": 4500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 1,
+          "material": "шерсть",
+          "origin": null,
+          "category": "outerwear",
+          "subcategory": null,
+          "condition": "new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-coat-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-03T10:00:00.000Z",
+          "updatedAt": "2026-08-03T10:00:00.000Z"
+        },
+        {
+          "id": "seed-dress",
+          "code": "D101",
+          "title": "Чёрное платье",
+          "notes": "платье S/M, 2200 сом, вискоза, новое, отложено",
+          "description": "",
+          "price": 2200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "quantity": 1,
+          "material": "вискоза",
+          "origin": null,
+          "category": "dresses",
+          "subcategory": null,
+          "condition": "new",
+          "status": "reserved",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-dress-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-04T10:00:00.000Z",
+          "updatedAt": "2026-08-04T10:00:00.000Z"
+        },
+        {
+          "id": "seed-sneakers",
+          "code": "S101",
+          "title": "Белые кроссовки",
+          "notes": "кроссовки 42, 1200 сом, продано",
+          "description": "",
+          "price": 1200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "42"
+          ],
+          "quantity": 0,
+          "material": null,
+          "origin": null,
+          "category": "shoes",
+          "subcategory": null,
+          "condition": "worn",
+          "status": "sold",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-sneakers-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-05T10:00:00.000Z",
+          "updatedAt": "2026-08-05T10:00:00.000Z"
+        },
+        {
+          "id": "seed-belt",
+          "code": "A101",
+          "title": "Кожаный ремень",
+          "notes": "ремень M, 700 сом, кожа, почти новый, 3 шт",
+          "description": "",
+          "price": 700,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 3,
+          "material": "кожа",
+          "origin": null,
+          "category": "accessories",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-belt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-06T10:00:00.000Z",
+          "updatedAt": "2026-08-06T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "a2c67bc0-51a5-41ef-93bb-00b4f03bcb85",
+      "label": "Board: section",
+      "at": "2026-08-18T11:23:54.074Z",
+      "board": {
+        "camera": {
+          "zoom": 0.35271936000000015,
+          "x": 20.83366341999991,
+          "y": -10.832475200000033
+        },
+        "elements": [
+          {
+            "id": "5113b2d7-6e1d-4767-b060-d1f459ba1c85",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 602.0525477818965,
+            "y": -70.5042359738915,
+            "width": 592,
+            "height": 456,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 786.6521083787402,
+            "y": 28.731779508785674,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 884.419282258847,
+            "y": 258.83016778551644,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 814.8707057077896,
+            "y": 123.62311938306985,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
+            "type": "section",
+            "title": "Раздел",
+            "x": 50.54138168089217,
+            "y": 182.91689475168016,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "5113b2d7-6e1d-4767-b060-d1f459ba1c85"
+          },
+          {
+            "id": "el-seed-cotton-shirt",
+            "type": "product",
+            "x": -141.81862552143429,
+            "y": 111.23755064082673,
+            "width": 250,
+            "height": 310,
+            "zIndex": 1,
+            "productId": "seed-cotton-shirt",
+            "sectionId": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f"
+          },
+          {
+            "id": "el-seed-jeans",
+            "type": "product",
+            "x": 352,
+            "y": 72,
+            "width": 250,
+            "height": 310,
+            "zIndex": 2,
+            "productId": "seed-jeans"
+          },
+          {
+            "id": "el-seed-coat",
+            "type": "product",
+            "x": 602.0762456021695,
+            "y": 112.10137478702615,
+            "width": 250,
+            "height": 310,
+            "zIndex": 3,
+            "productId": "seed-coat"
+          },
+          {
+            "id": "el-seed-dress",
+            "type": "product",
+            "x": 615.907661887343,
+            "y": 423.0448434131882,
+            "width": 250,
+            "height": 310,
+            "zIndex": 4,
+            "productId": "seed-dress"
+          },
+          {
+            "id": "el-seed-sneakers",
+            "type": "product",
+            "x": 72,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 5,
+            "productId": "seed-sneakers"
+          },
+          {
+            "id": "el-seed-belt",
+            "type": "product",
+            "x": 352,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 6,
+            "productId": "seed-belt"
+          },
+          {
+            "id": "04597aa0-5a91-432b-b130-45ed8d8cdb6f",
+            "type": "note",
+            "x": 66.68977408000009,
+            "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 7,
+            "text": "Заметка"
+          },
+          {
+            "id": "7bcbff54-52e8-434b-9f6f-e48a939f7372",
+            "type": "note",
+            "x": 66.7008487485411,
+            "y": 69.7493645933126,
+            "width": 220,
+            "height": 140,
+            "zIndex": 8,
+            "text": "Заметка"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "seed-cotton-shirt",
+          "code": "T101",
+          "title": "Хлопковая рубашка",
+          "notes": "хлопковая рубашка M/L, 1500 сом, осталось 4, почти новая",
+          "description": "",
+          "price": 1500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "quantity": 4,
+          "material": "хлопок",
+          "origin": null,
+          "category": "tops",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [
+            "Бөлүм"
+          ],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-cotton-shirt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-01T10:00:00.000Z",
+          "updatedAt": "2026-08-01T10:00:00.000Z"
+        },
+        {
+          "id": "seed-jeans",
+          "code": "B101",
+          "title": "Широкие джинсы",
+          "notes": "джинсы 32, 1800 сом, 2 шт, хлопок, хорошее",
+          "description": "",
+          "price": 1800,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "32"
+          ],
+          "quantity": 2,
+          "material": "хлопок",
+          "origin": null,
+          "category": "bottoms",
+          "subcategory": null,
+          "condition": "good",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-jeans-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-02T10:00:00.000Z",
+          "updatedAt": "2026-08-02T10:00:00.000Z"
+        },
+        {
+          "id": "seed-coat",
+          "code": "J101",
+          "title": "Шерстяное пальто",
+          "notes": "пальто M, 4500 сом, шерсть, новое, осталось 1",
+          "description": "",
+          "price": 4500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 1,
+          "material": "шерсть",
+          "origin": null,
+          "category": "outerwear",
+          "subcategory": null,
+          "condition": "new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-coat-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-03T10:00:00.000Z",
+          "updatedAt": "2026-08-03T10:00:00.000Z"
+        },
+        {
+          "id": "seed-dress",
+          "code": "D101",
+          "title": "Чёрное платье",
+          "notes": "платье S/M, 2200 сом, вискоза, новое, отложено",
+          "description": "",
+          "price": 2200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "quantity": 1,
+          "material": "вискоза",
+          "origin": null,
+          "category": "dresses",
+          "subcategory": null,
+          "condition": "new",
+          "status": "reserved",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-dress-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-04T10:00:00.000Z",
+          "updatedAt": "2026-08-04T10:00:00.000Z"
+        },
+        {
+          "id": "seed-sneakers",
+          "code": "S101",
+          "title": "Белые кроссовки",
+          "notes": "кроссовки 42, 1200 сом, продано",
+          "description": "",
+          "price": 1200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "42"
+          ],
+          "quantity": 0,
+          "material": null,
+          "origin": null,
+          "category": "shoes",
+          "subcategory": null,
+          "condition": "worn",
+          "status": "sold",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-sneakers-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-05T10:00:00.000Z",
+          "updatedAt": "2026-08-05T10:00:00.000Z"
+        },
+        {
+          "id": "seed-belt",
+          "code": "A101",
+          "title": "Кожаный ремень",
+          "notes": "ремень M, 700 сом, кожа, почти новый, 3 шт",
+          "description": "",
+          "price": 700,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 3,
+          "material": "кожа",
+          "origin": null,
+          "category": "accessories",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-belt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-06T10:00:00.000Z",
+          "updatedAt": "2026-08-06T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "069ec95b-48da-424e-8835-e1dae13467e8",
+      "label": "Board: section",
+      "at": "2026-08-18T11:23:57.627Z",
+      "board": {
+        "camera": {
+          "zoom": 0.35271936000000015,
+          "x": 20.83366341999991,
+          "y": -10.832475200000033
+        },
+        "elements": [
+          {
+            "id": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 261.5656109151479,
+            "y": -25.95033493483318,
+            "width": 664,
+            "height": 552,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "5113b2d7-6e1d-4767-b060-d1f459ba1c85",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 602.0525477818965,
+            "y": -70.5042359738915,
+            "width": 592,
+            "height": 456,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20"
+          },
+          {
+            "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 786.6521083787402,
+            "y": 28.731779508785674,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 884.419282258847,
+            "y": 258.83016778551644,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 814.8707057077896,
+            "y": 123.62311938306985,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
+            "type": "section",
+            "title": "Раздел",
+            "x": 50.54138168089217,
+            "y": 182.91689475168016,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "5113b2d7-6e1d-4767-b060-d1f459ba1c85"
+          },
+          {
+            "id": "el-seed-cotton-shirt",
+            "type": "product",
+            "x": -141.81862552143429,
+            "y": 111.23755064082673,
+            "width": 250,
+            "height": 310,
+            "zIndex": 1,
+            "productId": "seed-cotton-shirt",
+            "sectionId": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f"
+          },
+          {
+            "id": "el-seed-jeans",
+            "type": "product",
+            "x": 352,
+            "y": 72,
+            "width": 250,
+            "height": 310,
+            "zIndex": 2,
+            "productId": "seed-jeans"
+          },
+          {
+            "id": "el-seed-coat",
+            "type": "product",
+            "x": 602.0762456021695,
+            "y": 112.10137478702615,
+            "width": 250,
+            "height": 310,
+            "zIndex": 3,
+            "productId": "seed-coat"
+          },
+          {
+            "id": "el-seed-dress",
+            "type": "product",
+            "x": 615.907661887343,
+            "y": 423.0448434131882,
+            "width": 250,
+            "height": 310,
+            "zIndex": 4,
+            "productId": "seed-dress"
+          },
+          {
+            "id": "el-seed-sneakers",
+            "type": "product",
+            "x": 72,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 5,
+            "productId": "seed-sneakers"
+          },
+          {
+            "id": "el-seed-belt",
+            "type": "product",
+            "x": 352,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 6,
+            "productId": "seed-belt"
+          },
+          {
+            "id": "04597aa0-5a91-432b-b130-45ed8d8cdb6f",
+            "type": "note",
+            "x": 66.68977408000009,
+            "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 7,
+            "text": "Заметка"
+          },
+          {
+            "id": "7bcbff54-52e8-434b-9f6f-e48a939f7372",
+            "type": "note",
+            "x": 66.7008487485411,
+            "y": 69.7493645933126,
+            "width": 220,
+            "height": 140,
+            "zIndex": 8,
+            "text": "Заметка"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "seed-cotton-shirt",
+          "code": "T101",
+          "title": "Хлопковая рубашка",
+          "notes": "хлопковая рубашка M/L, 1500 сом, осталось 4, почти новая",
+          "description": "",
+          "price": 1500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "quantity": 4,
+          "material": "хлопок",
+          "origin": null,
+          "category": "tops",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [
+            "Бөлүм"
+          ],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-cotton-shirt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-01T10:00:00.000Z",
+          "updatedAt": "2026-08-01T10:00:00.000Z"
+        },
+        {
+          "id": "seed-jeans",
+          "code": "B101",
+          "title": "Широкие джинсы",
+          "notes": "джинсы 32, 1800 сом, 2 шт, хлопок, хорошее",
+          "description": "",
+          "price": 1800,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "32"
+          ],
+          "quantity": 2,
+          "material": "хлопок",
+          "origin": null,
+          "category": "bottoms",
+          "subcategory": null,
+          "condition": "good",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-jeans-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-02T10:00:00.000Z",
+          "updatedAt": "2026-08-02T10:00:00.000Z"
+        },
+        {
+          "id": "seed-coat",
+          "code": "J101",
+          "title": "Шерстяное пальто",
+          "notes": "пальто M, 4500 сом, шерсть, новое, осталось 1",
+          "description": "",
+          "price": 4500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 1,
+          "material": "шерсть",
+          "origin": null,
+          "category": "outerwear",
+          "subcategory": null,
+          "condition": "new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-coat-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-03T10:00:00.000Z",
+          "updatedAt": "2026-08-03T10:00:00.000Z"
+        },
+        {
+          "id": "seed-dress",
+          "code": "D101",
+          "title": "Чёрное платье",
+          "notes": "платье S/M, 2200 сом, вискоза, новое, отложено",
+          "description": "",
+          "price": 2200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "quantity": 1,
+          "material": "вискоза",
+          "origin": null,
+          "category": "dresses",
+          "subcategory": null,
+          "condition": "new",
+          "status": "reserved",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-dress-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-04T10:00:00.000Z",
+          "updatedAt": "2026-08-04T10:00:00.000Z"
+        },
+        {
+          "id": "seed-sneakers",
+          "code": "S101",
+          "title": "Белые кроссовки",
+          "notes": "кроссовки 42, 1200 сом, продано",
+          "description": "",
+          "price": 1200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "42"
+          ],
+          "quantity": 0,
+          "material": null,
+          "origin": null,
+          "category": "shoes",
+          "subcategory": null,
+          "condition": "worn",
+          "status": "sold",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-sneakers-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-05T10:00:00.000Z",
+          "updatedAt": "2026-08-05T10:00:00.000Z"
+        },
+        {
+          "id": "seed-belt",
+          "code": "A101",
+          "title": "Кожаный ремень",
+          "notes": "ремень M, 700 сом, кожа, почти новый, 3 шт",
+          "description": "",
+          "price": 700,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 3,
+          "material": "кожа",
+          "origin": null,
+          "category": "accessories",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-belt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-06T10:00:00.000Z",
+          "updatedAt": "2026-08-06T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "ded9ec89-dd9d-46ee-81dd-97c5c94a87fe",
+      "label": "Board: section",
+      "at": "2026-08-18T11:23:58.678Z",
+      "board": {
+        "camera": {
+          "zoom": 0.35271936000000015,
+          "x": 20.83366341999991,
+          "y": -10.832475200000033
+        },
+        "elements": [
+          {
+            "id": "2ddaccab-1368-4033-9f3b-9f4ff3c34fb5",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 225.5656109151479,
+            "y": -89.95033493483318,
+            "width": 736,
+            "height": 648,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 261.5656109151479,
+            "y": -25.95033493483318,
+            "width": 664,
+            "height": 552,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "2ddaccab-1368-4033-9f3b-9f4ff3c34fb5"
+          },
+          {
+            "id": "5113b2d7-6e1d-4767-b060-d1f459ba1c85",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 602.0525477818965,
+            "y": -70.5042359738915,
+            "width": 592,
+            "height": 456,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20"
+          },
+          {
+            "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 786.6521083787402,
+            "y": 28.731779508785674,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 884.419282258847,
+            "y": 258.83016778551644,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 814.8707057077896,
+            "y": 123.62311938306985,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
+            "type": "section",
+            "title": "Раздел",
+            "x": 50.54138168089217,
+            "y": 182.91689475168016,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "5113b2d7-6e1d-4767-b060-d1f459ba1c85"
+          },
+          {
+            "id": "el-seed-cotton-shirt",
+            "type": "product",
+            "x": -141.81862552143429,
+            "y": 111.23755064082673,
+            "width": 250,
+            "height": 310,
+            "zIndex": 1,
+            "productId": "seed-cotton-shirt",
+            "sectionId": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f"
+          },
+          {
+            "id": "el-seed-jeans",
+            "type": "product",
+            "x": 352,
+            "y": 72,
+            "width": 250,
+            "height": 310,
+            "zIndex": 2,
+            "productId": "seed-jeans"
+          },
+          {
+            "id": "el-seed-coat",
+            "type": "product",
+            "x": 602.0762456021695,
+            "y": 112.10137478702615,
+            "width": 250,
+            "height": 310,
+            "zIndex": 3,
+            "productId": "seed-coat"
+          },
+          {
+            "id": "el-seed-dress",
+            "type": "product",
+            "x": 615.907661887343,
+            "y": 423.0448434131882,
+            "width": 250,
+            "height": 310,
+            "zIndex": 4,
+            "productId": "seed-dress"
+          },
+          {
+            "id": "el-seed-sneakers",
+            "type": "product",
+            "x": 72,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 5,
+            "productId": "seed-sneakers"
+          },
+          {
+            "id": "el-seed-belt",
+            "type": "product",
+            "x": 352,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 6,
+            "productId": "seed-belt"
+          },
+          {
+            "id": "04597aa0-5a91-432b-b130-45ed8d8cdb6f",
+            "type": "note",
+            "x": 66.68977408000009,
+            "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 7,
+            "text": "Заметка"
+          },
+          {
+            "id": "7bcbff54-52e8-434b-9f6f-e48a939f7372",
+            "type": "note",
+            "x": 66.7008487485411,
+            "y": 69.7493645933126,
+            "width": 220,
+            "height": 140,
+            "zIndex": 8,
+            "text": "Заметка"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "seed-cotton-shirt",
+          "code": "T101",
+          "title": "Хлопковая рубашка",
+          "notes": "хлопковая рубашка M/L, 1500 сом, осталось 4, почти новая",
+          "description": "",
+          "price": 1500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "quantity": 4,
+          "material": "хлопок",
+          "origin": null,
+          "category": "tops",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [
+            "Бөлүм"
+          ],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-cotton-shirt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b85?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-01T10:00:00.000Z",
+          "updatedAt": "2026-08-01T10:00:00.000Z"
+        },
+        {
+          "id": "seed-jeans",
+          "code": "B101",
+          "title": "Широкие джинсы",
+          "notes": "джинсы 32, 1800 сом, 2 шт, хлопок, хорошее",
+          "description": "",
+          "price": 1800,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "32"
+          ],
+          "quantity": 2,
+          "material": "хлопок",
+          "origin": null,
+          "category": "bottoms",
+          "subcategory": null,
+          "condition": "good",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-jeans-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-02T10:00:00.000Z",
+          "updatedAt": "2026-08-02T10:00:00.000Z"
+        },
+        {
+          "id": "seed-coat",
+          "code": "J101",
+          "title": "Шерстяное пальто",
+          "notes": "пальто M, 4500 сом, шерсть, новое, осталось 1",
+          "description": "",
+          "price": 4500,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 1,
+          "material": "шерсть",
+          "origin": null,
+          "category": "outerwear",
+          "subcategory": null,
+          "condition": "new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-coat-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-03T10:00:00.000Z",
+          "updatedAt": "2026-08-03T10:00:00.000Z"
+        },
+        {
+          "id": "seed-dress",
+          "code": "D101",
+          "title": "Чёрное платье",
+          "notes": "платье S/M, 2200 сом, вискоза, новое, отложено",
+          "description": "",
+          "price": 2200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "quantity": 1,
+          "material": "вискоза",
+          "origin": null,
+          "category": "dresses",
+          "subcategory": null,
+          "condition": "new",
+          "status": "reserved",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-dress-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-04T10:00:00.000Z",
+          "updatedAt": "2026-08-04T10:00:00.000Z"
+        },
+        {
+          "id": "seed-sneakers",
+          "code": "S101",
+          "title": "Белые кроссовки",
+          "notes": "кроссовки 42, 1200 сом, продано",
+          "description": "",
+          "price": 1200,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "42"
+          ],
+          "quantity": 0,
+          "material": null,
+          "origin": null,
+          "category": "shoes",
+          "subcategory": null,
+          "condition": "worn",
+          "status": "sold",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-sneakers-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-05T10:00:00.000Z",
+          "updatedAt": "2026-08-05T10:00:00.000Z"
+        },
+        {
+          "id": "seed-belt",
+          "code": "A101",
+          "title": "Кожаный ремень",
+          "notes": "ремень M, 700 сом, кожа, почти новый, 3 шт",
+          "description": "",
+          "price": 700,
+          "wholesalePrice": null,
+          "minWholesaleQty": null,
+          "sizes": [
+            "M"
+          ],
+          "quantity": 3,
+          "material": "кожа",
+          "origin": null,
+          "category": "accessories",
+          "subcategory": null,
+          "condition": "like-new",
+          "status": "in_stock",
+          "tags": [],
+          "collections": [],
+          "published": true,
+          "photos": [
+            "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+          ],
+          "videos": [],
+          "variants": [
+            {
+              "id": "seed-belt-v1",
+              "color": null,
+              "photos": [
+                "https://images.unsplash.com/photo-1624222247344-550fb60583c2?auto=format&fit=crop&w=1200&q=80"
+              ],
+              "videos": []
+            }
+          ],
+          "createdAt": "2026-08-06T10:00:00.000Z",
+          "updatedAt": "2026-08-06T10:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "2dfb3cda-4744-45b9-af6d-2e11a9b13926",
+      "label": "Board: section",
+      "at": "2026-08-18T11:23:59.421Z",
+      "board": {
+        "camera": {
+          "zoom": 0.35271936000000015,
+          "x": 20.83366341999991,
+          "y": -10.832475200000033
+        },
+        "elements": [
+          {
+            "id": "83c7d2f6-b286-49c8-b92d-6856e25ef455",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 225.5656109151479,
+            "y": -89.95033493483318,
+            "width": 736,
+            "height": 648,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "2ddaccab-1368-4033-9f3b-9f4ff3c34fb5",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 225.5656109151479,
+            "y": -89.95033493483318,
+            "width": 736,
+            "height": 648,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 261.5656109151479,
+            "y": -25.95033493483318,
+            "width": 664,
+            "height": 552,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "83c7d2f6-b286-49c8-b92d-6856e25ef455"
+          },
+          {
+            "id": "5113b2d7-6e1d-4767-b060-d1f459ba1c85",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 602.0525477818965,
+            "y": -70.5042359738915,
+            "width": 592,
+            "height": 456,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "4ed0d6b3-5d1f-4eaa-9ca6-4d004f853b20"
+          },
+          {
+            "id": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 786.6521083787402,
+            "y": 28.731779508785674,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "c21ba944-26ce-483e-bef7-4ce0e8386b58",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 884.419282258847,
+            "y": 258.83016778551644,
+            "width": 322,
+            "height": 406,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "10ff3ee1-0f54-4c71-9dc3-933b182d2483",
+            "type": "section",
+            "title": "Бөлүм",
+            "x": 814.8707057077896,
+            "y": 123.62311938306985,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff"
+          },
+          {
+            "id": "f07f1d87-20cf-46de-ad4d-0d77b73fdf74",
+            "type": "section",
+            "title": "Раздел",
+            "x": 50.54138168089217,
+            "y": 182.91689475168016,
+            "width": 520,
+            "height": 360,
+            "zIndex": 0,
+            "color": "#dbe7ff",
+            "sectionId": "5113b2d7-6e1d-4767-b060-d1f459ba1c85"
+          },
+          {
+            "id": "el-seed-cotton-shirt",
+            "type": "product",
+            "x": -141.81862552143429,
+            "y": 111.23755064082673,
+            "width": 250,
+            "height": 310,
+            "zIndex": 1,
+            "productId": "seed-cotton-shirt",
+            "sectionId": "1c2d9c5f-5cc3-4033-9a37-31cbda68d32f"
+          },
+          {
+            "id": "el-seed-jeans",
+            "type": "product",
+            "x": 352,
+            "y": 72,
+            "width": 250,
+            "height": 310,
+            "zIndex": 2,
+            "productId": "seed-jeans"
+          },
+          {
+            "id": "el-seed-coat",
+            "type": "product",
+            "x": 602.0762456021695,
+            "y": 112.10137478702615,
+            "width": 250,
+            "height": 310,
+            "zIndex": 3,
+            "productId": "seed-coat"
+          },
+          {
+            "id": "el-seed-dress",
+            "type": "product",
+            "x": 615.907661887343,
+            "y": 423.0448434131882,
+            "width": 250,
+            "height": 310,
+            "zIndex": 4,
+            "productId": "seed-dress"
+          },
+          {
+            "id": "el-seed-sneakers",
+            "type": "product",
+            "x": 72,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 5,
+            "productId": "seed-sneakers"
+          },
+          {
+            "id": "el-seed-belt",
+            "type": "product",
+            "x": 352,
+            "y": 412,
+            "width": 250,
+            "height": 310,
+            "zIndex": 6,
+            "productId": "seed-belt"
+          },
+          {
+            "id": "04597aa0-5a91-432b-b130-45ed8d8cdb6f",
+            "type": "note",
+            "x": 66.68977408000009,
+            "y": 69.39497520000003,
+            "width": 220,
+            "height": 140,
+            "zIndex": 7,
+            "text": "Заметка"
+          },
+          {
+            "id": "7bcbff54-52e8-434b-9f6f-e48a939f7372",
+            "type": "note",
+            "x": 66.7008487485411,
+            "y": 69.7493645933126,
             "width": 220,
             "height": 140,
             "zIndex": 8,

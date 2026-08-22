@@ -4,12 +4,14 @@ export function emptyBoard(): BoardSnapshot {
   return {
     camera: { x: 0, y: 0, zoom: 1 },
     elements: [],
+    version: 1,
   };
 }
 
 export function boardFromItems(items: Item[]): BoardSnapshot {
   return {
     camera: { x: 0, y: 0, zoom: 1 },
+    version: 1,
     elements: items.map((item, index) => ({
       id: `el-${item.id}`,
       type: "product" as const,

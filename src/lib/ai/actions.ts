@@ -2,7 +2,8 @@ import type { CatalogData, Item } from "@/lib/catalog/types";
 import { flattenMedia, nextProductCode } from "@/lib/catalog/codes";
 import { cascadePoint, nextZIndex } from "@/lib/board/layout";
 import type { Category } from "@/lib/catalog/types";
-import { missingFields, normalizeItem } from "@/lib/catalog/store";
+import { persistableUrl } from "@/lib/media/delivery";
+import { missingFields, normalizeItem } from "@/lib/catalog/normalize";
 
 export type ToolResult = {
   ok: boolean;
@@ -165,13 +166,14 @@ export function cardsFromMedia(
   }
   let created = 0;
   for (const element of media) {
+    const ref = persistableUrl(element.mediaUrl!, element.mediaId);
     const isVideo = element.mediaKind === "video";
     const item = normalizeItem(
       {
         id: crypto.randomUUID(),
         title: "Новая вещь",
-        photos: isVideo ? [] : [element.mediaUrl!],
-        videos: isVideo ? [element.mediaUrl!] : [],
+        photos: isVideo ? [] : [ref],
+        videos: isVideo ? [ref] : [],
         published: false,
         status: "in_stock",
       },
@@ -328,16 +330,18 @@ export function applyOrganize(data: CatalogData, groups: OrganizeGroup[]): ToolR
     const variants = group.variants.map((variant) => ({
       id: crypto.randomUUID(),
       color: variant.color,
-      photos: variant.mediaUrls.filter((url) =>
-        media.some(
-          (element) => element.mediaUrl === url && element.mediaKind !== "video",
-        ),
-      ),
-      videos: variant.mediaUrls.filter((url) =>
-        media.some(
-          (element) => element.mediaUrl === url && element.mediaKind === "video",
-        ),
-      ),
+      photos: variant.mediaUrls.flatMap((url) => {
+        const element = media.find(
+          (entry) => entry.mediaUrl === url && entry.mediaKind !== "video",
+        );
+        return element ? [persistableUrl(url, element.mediaId)] : [];
+      }),
+      videos: variant.mediaUrls.flatMap((url) => {
+        const element = media.find(
+          (entry) => entry.mediaUrl === url && entry.mediaKind === "video",
+        );
+        return element ? [persistableUrl(url, element.mediaId)] : [];
+      }),
     }));
 
     const item = normalizeItem(
@@ -385,12 +389,151 @@ export function applyOrganize(data: CatalogData, groups: OrganizeGroup[]): ToolR
         kind: "maybe-same",
         text: `These may be the same product as another group: ${item.title}.`,
         productIds: [item.id],
+        elementIds: allUrls
+          .map((url) => media.find((entry) => entry.mediaUrl === url)?.id)
+          .filter((id): id is string => Boolean(id)),
       });
     }
   });
 
   return {
     ok: true,
-    summary: `Organized into ${created} products.${low.length ? ` ${low.length} need review.` : ""}`,
+    summary: `Organized into ${created} draft products (not published).${low.length ? ` ${low.length} need review.` : ""}`,
   };
 }
+
+export function separateProducts(
+  data: CatalogData,
+  productId: string,
+  variantIds: string[],
+): ToolResult {
+  const item = itemById(data, productId);
+  if (!item) return { ok: false, summary: "Product not found." };
+  const moving = item.variants.filter((variant) => variantIds.includes(variant.id));
+  if (!moving.length) return { ok: false, summary: "No variants to separate." };
+  item.variants = item.variants.filter((variant) => !variantIds.includes(variant.id));
+  const media = flattenMedia({ ...item, variants: moving });
+  const created = normalizeItem(
+    {
+      id: crypto.randomUUID(),
+      title: item.title,
+      category: item.category,
+      variants: moving,
+      photos: media.photos,
+      videos: media.videos,
+      published: false,
+      status: "in_stock",
+    },
+    data.items,
+  );
+  created.code = nextProductCode(data.items, created.category);
+  data.items.unshift(created);
+  item.photos = flattenMedia(item).photos;
+  item.videos = flattenMedia(item).videos;
+  item.updatedAt = new Date().toISOString();
+  const origin = cascadePoint(0, 120, 120);
+  data.board.elements.push({
+    id: crypto.randomUUID(),
+    type: "product",
+    x: origin.x,
+    y: origin.y,
+    width: 250,
+    height: 310,
+    zIndex: nextZIndex(data.board.elements),
+    productId: created.id,
+  });
+  return {
+    ok: true,
+    summary: `Separated ${moving.length} variants into draft ${created.code}.`,
+  };
+}
+
+export function renameSection(
+  data: CatalogData,
+  sectionId: string,
+  title: string,
+): ToolResult {
+  const section = data.board.elements.find(
+    (element) => element.id === sectionId && element.type === "section",
+  );
+  if (!section) return { ok: false, summary: "Section not found." };
+  const previous = section.title;
+  section.title = title;
+  for (const element of data.board.elements) {
+    if (element.sectionId !== sectionId || !element.productId) continue;
+    const item = itemById(data, element.productId);
+    if (!item) continue;
+    item.collections = item.collections
+      .map((entry) => (entry === previous ? title : entry))
+      .filter((entry, index, list) => list.indexOf(entry) === index);
+    if (!item.collections.includes(title)) item.collections.push(title);
+  }
+  return { ok: true, summary: `Renamed section to “${title}”.` };
+}
+
+export function applyTags(
+  data: CatalogData,
+  ids: string[],
+  tags: string[],
+): ToolResult {
+  let count = 0;
+  for (const id of ids) {
+    const item = itemById(data, id);
+    if (!item) continue;
+    item.tags = [...new Set([...item.tags, ...tags.map((tag) => tag.trim()).filter(Boolean)])];
+    item.updatedAt = new Date().toISOString();
+    count += 1;
+  }
+  return { ok: true, summary: `Updated tags on ${count} products.` };
+}
+
+export function applyCollections(
+  data: CatalogData,
+  ids: string[],
+  collections: string[],
+): ToolResult {
+  let count = 0;
+  for (const id of ids) {
+    const item = itemById(data, id);
+    if (!item) continue;
+    item.collections = [
+      ...new Set([
+        ...item.collections,
+        ...collections.map((entry) => entry.trim()).filter(Boolean),
+      ]),
+    ];
+    item.updatedAt = new Date().toISOString();
+    count += 1;
+  }
+  return { ok: true, summary: `Updated collections on ${count} products.` };
+}
+
+export function prepareForReview(
+  data: CatalogData,
+  productIds: string[],
+): ToolResult {
+  const ids = productIds.length
+    ? productIds
+    : data.items.filter((item) => !item.published).map((item) => item.id);
+  let count = 0;
+  for (const id of ids) {
+    const item = itemById(data, id);
+    if (!item) continue;
+    const missing = missingFields(item);
+    data.suggestions.push({
+      id: crypto.randomUUID(),
+      kind: "review",
+      text: missing.length
+        ? `${item.code}: needs ${missing.join(", ")} before publish.`
+        : `${item.code}: ready for your publish confirmation.`,
+      productIds: [item.id],
+    });
+    count += 1;
+  }
+  highlightProducts(data, ids);
+  return {
+    ok: true,
+    summary: `Prepared ${count} products for seller review. Nothing published.`,
+  };
+}
+
