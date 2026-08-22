@@ -39,7 +39,7 @@ Catalog is empty (good). In Studio → **Добавить**: title, price, sizes
 
 **Vercel** (if you use `catalog-*.vercel.app`):
 
-1. Push this repo (must include `vercel.json` and `api/[...path].ts`).
+1. Push this repo (must include `vercel.json`; build generates `api/index.js`).
 2. In Vercel → Project → Settings → Environment Variables, add:
    - `SUPABASE_URL` (or `NEXT_PUBLIC_SUPABASE_URL`)
    - `SUPABASE_ANON_KEY` (or `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
