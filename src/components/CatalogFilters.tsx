@@ -52,14 +52,14 @@ export function CatalogFilters(props: CatalogFiltersProps) {
           onClick={() => apply({ status: "available" })}
           className={chipClass(props.status === "available")}
         >
-          {t("home.available", { count: props.counts.available })}
+          {t("home.available")}
         </button>
         <button
           type="button"
           onClick={() => apply({ status: "all" })}
           className={chipClass(props.status === "all")}
         >
-          {t("home.allItems", { count: props.counts.all })}
+          {t("home.allItems")}
         </button>
       </div>
       {!props.hideCategories ? (

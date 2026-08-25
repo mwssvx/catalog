@@ -11,6 +11,22 @@ import { categoryLabel } from "@/lib/catalog/format";
 import { DEFAULT_SHOP_CATEGORIES } from "@/lib/catalog/types";
 import type { Category, Item, ItemFilters, Shop } from "@/lib/catalog/types";
 
+/** Soft lifestyle fallbacks when a category has no product photos yet. */
+const CATEGORY_FALLBACK: Record<string, string> = {
+  sets: "https://images.unsplash.com/photo-1617331140180-e8262094733a?auto=format&fit=crop&w=600&q=80",
+  nightdresses:
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
+  robes:
+    "https://images.unsplash.com/photo-1618556450991-2f1af64e8191?auto=format&fit=crop&w=600&q=80",
+  loungewear:
+    "https://images.unsplash.com/photo-1618377382884-c6c0c6b4c9f0?auto=format&fit=crop&w=600&q=80",
+  accessories:
+    "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+};
+
+const HERO_FALLBACK =
+  "https://images.unsplash.com/photo-1617331140180-e8262094733a?auto=format&fit=crop&w=1800&q=80";
+
 type HomeData = {
   key: string;
   shop: Shop;
@@ -18,6 +34,13 @@ type HomeData = {
   allItems: Item[];
   sizes: string[];
 };
+
+function scrollToCatalog() {
+  document.getElementById("catalog")?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+}
 
 export function HomePage() {
   const { t } = useTranslation("translation");
@@ -70,6 +93,13 @@ export function HomePage() {
     };
   }, [status, category, size, q, reloadKey, queryKey]);
 
+  useEffect(() => {
+    if (window.location.hash === "#catalog") {
+      const id = window.setTimeout(scrollToCatalog, 60);
+      return () => window.clearTimeout(id);
+    }
+  }, [data?.key]);
+
   const shop = data?.shop ?? null;
   const loading = !error && data?.key !== queryKey;
   const items = loading ? [] : (data?.items ?? []);
@@ -100,57 +130,81 @@ export function HomePage() {
   const categories =
     shop.categories?.length > 0 ? shop.categories : DEFAULT_SHOP_CATEGORIES;
   const brandName = shop.name?.trim() || "Velviera";
+  const heroSrc = shop.coverUrl || HERO_FALLBACK;
+
+  function categoryPhoto(value: string): string | undefined {
+    const match = allItems.find(
+      (item) => item.category === value && item.photos[0],
+    );
+    return match?.photos[0] || CATEGORY_FALLBACK[value];
+  }
 
   function setCategory(next: string) {
     const params = new URLSearchParams(searchParams);
     if (next && next !== "all") params.set("category", next);
     else params.delete("category");
     setSearchParams(params, { replace: true });
+    window.setTimeout(scrollToCatalog, 40);
   }
 
   return (
     <div className="flex min-h-full flex-col">
       <Header shop={shop} />
-      <section className="relative min-h-[78vh] w-full overflow-hidden sm:min-h-[85vh]">
-        {shop.coverUrl ? (
-          <img
-            src={shop.coverUrl}
-            alt=""
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        ) : (
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(135deg, #f7e4df 0%, #f7f1ea 45%, #e8d5ce 100%)",
-            }}
-          />
-        )}
+
+      <section className="relative min-h-[88vh] w-full overflow-hidden">
+        <img
+          src={heroSrc}
+          alt=""
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         <div className="hero-veil absolute inset-0" />
-        <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-5 pb-12 pt-28 sm:min-h-[85vh] sm:justify-center sm:px-8 sm:pb-20 sm:pt-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-olive-deep sm:text-olive">
-            {shop.location || t("home.locationFallback")}
-          </p>
-          <h1 className="font-display mt-3 text-5xl font-semibold tracking-tight text-ink sm:text-7xl">
+        <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 sm:justify-center sm:px-8 sm:pb-24">
+          <p className="animate-rise text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-ink-soft">
             {brandName}
-          </h1>
-          <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">
-            {shop.tagline?.trim() || t("home.subtitle")}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#catalog" className="btn btn-primary min-h-12 px-6">
-              {t("home.explore")}
-            </a>
+          <h1 className="animate-rise-delay font-display mt-4 max-w-xl whitespace-pre-line text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-7xl">
+            {shop.tagline?.trim()
+              ? shop.tagline.trim().replace(/\. /g, ".\n")
+              : t("home.heroHeadline")}
+          </h1>
+          <p className="animate-rise-delay-2 mt-5 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">
+            {t("home.subtitle")}
+          </p>
+          <div className="animate-rise-delay-2 mt-9">
+            <button
+              type="button"
+              className="btn btn-primary min-h-12 px-7"
+              onClick={scrollToCatalog}
+            >
+              {t("home.viewCatalog")}
+            </button>
           </div>
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 space-y-10 px-5 py-10 sm:px-8 sm:py-14">
+      <section className="border-y border-rule/80 bg-paper-2/70">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 py-8 sm:grid-cols-3 sm:px-8 sm:py-10">
+          {[t("home.uspSoft"), t("home.uspCare"), t("home.uspOrder")].map(
+            (label) => (
+              <div
+                key={label}
+                className="flex items-center justify-center gap-3 text-center sm:justify-start sm:text-left"
+              >
+                <span className="size-1.5 shrink-0 rounded-full bg-olive" />
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft">
+                  {label}
+                </p>
+              </div>
+            ),
+          )}
+        </div>
+      </section>
+
+      <main className="mx-auto w-full max-w-6xl flex-1 space-y-16 px-5 py-14 sm:px-8 sm:py-20">
         {error ? (
-          <div className="flex flex-wrap items-center gap-3 rounded-[20px] bg-paper-2 px-4 py-3 text-sm shadow-sm">
+          <div className="flex flex-wrap items-center gap-3 rounded-xl bg-paper-2 px-4 py-3 text-sm">
             <p className="text-sold">{error}</p>
             <button
               type="button"
@@ -162,76 +216,88 @@ export function HomePage() {
           </div>
         ) : null}
 
-        <section className="space-y-5">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
-              {t("home.shopByCategory")}
-            </p>
-            <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight">
-              {t("home.categoriesTitle")}
-            </h2>
+        <section className="space-y-8">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted">
+                {t("home.shopByCategory")}
+              </p>
+              <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+                {t("home.categoriesTitle")}
+              </h2>
+            </div>
           </div>
-          <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+          <div className="-mx-1 flex gap-5 overflow-x-auto px-1 pb-3 [scrollbar-width:thin]">
             <button
               type="button"
               onClick={() => setCategory("all")}
-              className={`flex w-24 shrink-0 flex-col items-center gap-2 ${
-                category === "all" ? "opacity-100" : "opacity-80 hover:opacity-100"
-              }`}
+              className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
             >
               <span
-                className={`grid size-20 place-items-center rounded-full border text-sm font-semibold ${
+                className={`grid size-[5.5rem] place-items-center overflow-hidden rounded-full border transition ${
                   category === "all"
-                    ? "border-olive-deep bg-olive-deep text-white"
-                    : "border-rule bg-paper-2 text-ink"
+                    ? "border-ink ring-2 ring-ink/15"
+                    : "border-rule"
                 }`}
               >
-                {t("home.allKindsShort")}
+                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink">
+                  {t("home.allKindsShort")}
+                </span>
               </span>
-              <span className="text-center text-xs font-medium text-muted">
+              <span className="text-center text-[0.7rem] font-medium uppercase tracking-[0.08em] text-muted">
                 {t("home.allKinds")}
               </span>
             </button>
-            {categories.map((value) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setCategory(value)}
-                className={`flex w-24 shrink-0 flex-col items-center gap-2 ${
-                  category === value
-                    ? "opacity-100"
-                    : "opacity-80 hover:opacity-100"
-                }`}
-              >
-                <span
-                  className={`grid size-20 place-items-center rounded-full border text-center text-[11px] font-semibold leading-tight ${
-                    category === value
-                      ? "border-olive-deep bg-olive-deep text-white"
-                      : "border-rule bg-sage/50 text-ink"
-                  }`}
+            {categories.map((value) => {
+              const photo = categoryPhoto(value);
+              const active = category === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setCategory(value)}
+                  className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
                 >
-                  {categoryLabel(value, t)}
-                </span>
-                <span className="line-clamp-2 text-center text-xs font-medium text-muted">
-                  {categoryLabel(value, t)}
-                </span>
-              </button>
-            ))}
+                  <span
+                    className={`size-[5.5rem] overflow-hidden rounded-full border transition ${
+                      active ? "border-ink ring-2 ring-ink/15" : "border-rule"
+                    }`}
+                  >
+                    {photo ? (
+                      <img
+                        src={photo}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="grid h-full w-full place-items-center bg-sage/50 text-[0.6rem] font-semibold uppercase">
+                        {categoryLabel(value, t).slice(0, 6)}
+                      </span>
+                    )}
+                  </span>
+                  <span className="line-clamp-2 text-center text-[0.7rem] font-medium uppercase tracking-[0.08em] text-muted">
+                    {categoryLabel(value, t)}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
 
-        <section id="catalog" className="scroll-mt-28 space-y-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <section id="catalog" className="scroll-mt-24 space-y-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted">
                 {t("home.catalogEyebrow")}
               </p>
-              <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight">
+              <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
                 {t("home.catalogTitle")}
               </h2>
             </div>
             <form
-              className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center"
+              className="flex w-full flex-col gap-2 sm:max-w-sm sm:flex-row sm:items-center"
               onSubmit={(event) => {
                 event.preventDefault();
                 const form = new FormData(event.currentTarget);
@@ -277,12 +343,14 @@ export function HomePage() {
           )}
         </section>
 
-        <section className="rounded-[28px] bg-sage/40 px-5 py-8 sm:px-8">
-          <p className="font-display text-2xl font-semibold tracking-tight text-ink">
+        <section className="border border-rule/80 bg-paper-2/60 px-6 py-10 sm:px-10">
+          <p className="font-display text-3xl font-semibold tracking-tight text-ink">
             {t("home.contactTitle")}
           </p>
-          <p className="mt-2 max-w-lg text-sm text-muted">{t("home.contactHelp")}</p>
-          <div className="mt-5">
+          <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted">
+            {t("home.contactHelp")}
+          </p>
+          <div className="mt-6">
             <ContactLinks
               shop={shop}
               whatsappMessage={t("home.whatsappMessage", { shop: brandName })}

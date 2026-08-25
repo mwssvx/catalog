@@ -15,47 +15,27 @@ export function ItemCard({
 }) {
   const { t } = useTranslation();
   const destination = href ?? `/item/${item.id}`;
-  const statusLabel = t(`status.${item.status}`);
 
   return (
-    <Link
-      href={destination}
-      className="group block overflow-hidden rounded-[24px] bg-paper-2 shadow-sm ring-1 ring-rule/60 transition duration-200 hover:-translate-y-1 hover:shadow-md"
-    >
+    <Link href={destination} className="group block">
       <CoverPhoto
         src={item.photos[0]}
         alt={item.title}
         sold={item.status === "sold"}
         soldLabel={t("status.sold")}
         emptyLabel={t("form.noPhoto")}
-        className="aspect-[3/4] rounded-none"
+        className="aspect-[3/4] rounded-[1.25rem] bg-[#efe6df] transition duration-300 group-hover:opacity-95"
       />
-      <div className="space-y-2 px-4 py-4">
-        <div className="flex items-start justify-between gap-2">
-          <h2 className="min-w-0 text-[15px] font-semibold leading-snug tracking-tight">
-            {item.title}
-          </h2>
-          <p className="shrink-0 text-sm font-semibold tabular-nums text-olive-deep">
-            {formatPrice(item.price, currencySymbol, t("item.ask"))}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {(item.sizes.length > 0 ? item.sizes : [t("item.sizeUnknown")]).map(
-            (size) => (
-              <span
-                key={size}
-                className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted"
-              >
-                {size}
-              </span>
-            ),
-          )}
-          {item.status !== "in_stock" ? (
-            <span className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted">
-              {statusLabel}
-            </span>
-          ) : null}
-        </div>
+      <div className="mt-3 space-y-1 px-0.5">
+        <h2 className="text-[0.95rem] font-medium leading-snug tracking-tight text-ink">
+          {item.title}
+        </h2>
+        <p className="text-sm tabular-nums text-muted">
+          {formatPrice(item.price, currencySymbol, t("item.ask"))}
+        </p>
+        {item.status !== "in_stock" && item.status !== "reserved" ? (
+          <p className="text-xs text-muted">{t(`status.${item.status}`)}</p>
+        ) : null}
       </div>
     </Link>
   );
