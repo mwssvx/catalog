@@ -105,7 +105,7 @@ export function ItemPage() {
             />
           ))}
         </div>
-        <div className="rounded-[28px] bg-paper-2 p-6 shadow-sm ring-1 ring-rule/50 lg:sticky lg:top-28 lg:self-start sm:p-8">
+        <div className="rounded-[1.75rem] border border-rule/70 bg-paper-2 p-6 shadow-sm lg:sticky lg:top-28 lg:self-start sm:p-8">
           <Link href="/" className="btn btn-secondary min-h-10 text-sm">
             {t("item.back")}
           </Link>

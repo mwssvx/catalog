@@ -16,22 +16,20 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em]">
-      {locales.map((code, index) => (
-        <span key={code} className="flex items-center gap-1">
-          {index > 0 ? <span className="text-rule">/</span> : null}
-          <button
-            type="button"
-            onClick={() => switchTo(code)}
-            className={
-              locale === code
-                ? "text-ink"
-                : "text-muted transition hover:text-ink"
-            }
-          >
-            {code}
-          </button>
-        </span>
+    <div className="flex rounded-[1rem] border border-rule bg-paper p-1">
+      {locales.map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => switchTo(code)}
+          className={
+            locale === code
+              ? "rounded-[0.75rem] bg-olive-deep px-2.5 py-1.5 text-xs font-semibold text-white"
+              : "rounded-[0.75rem] px-2.5 py-1.5 text-xs font-semibold text-muted transition hover:text-ink"
+          }
+        >
+          {code.toUpperCase()}
+        </button>
       ))}
     </div>
   );

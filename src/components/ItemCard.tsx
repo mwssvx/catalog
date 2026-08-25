@@ -24,7 +24,7 @@ export function ItemCard({
         sold={item.status === "sold"}
         soldLabel={t("status.sold")}
         emptyLabel={t("form.noPhoto")}
-        className="aspect-[3/4] rounded-[1.25rem] bg-[#efe6df] transition duration-300 group-hover:opacity-95"
+        className="aspect-[3/4] rounded-[1.35rem] bg-[#efe6df] shadow-sm ring-1 ring-rule/50 transition duration-300 group-hover:-translate-y-0.5 group-hover:shadow-md"
       />
       <div className="mt-3 space-y-1 px-0.5">
         <h2 className="text-[0.95rem] font-medium leading-snug tracking-tight text-ink">

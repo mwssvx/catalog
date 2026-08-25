@@ -184,16 +184,16 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-rule/80 bg-paper-2/70">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-5 py-8 sm:grid-cols-3 sm:px-8 sm:py-10">
+      <section className="px-5 py-6 sm:px-8 sm:py-8">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           {[t("home.uspSoft"), t("home.uspCare"), t("home.uspOrder")].map(
             (label) => (
               <div
                 key={label}
-                className="flex items-center justify-center gap-3 text-center sm:justify-start sm:text-left"
+                className="flex items-center justify-center gap-3 rounded-[1.25rem] border border-rule/80 bg-paper-2/90 px-4 py-4 text-center shadow-sm"
               >
-                <span className="size-1.5 shrink-0 rounded-full bg-olive" />
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft">
+                <span className="size-2 shrink-0 rounded-full bg-olive" />
+                <p className="text-xs font-semibold tracking-wide text-ink-soft">
                   {label}
                 </p>
               </div>
@@ -234,17 +234,17 @@ export function HomePage() {
               className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
             >
               <span
-                className={`grid size-[5.5rem] place-items-center overflow-hidden rounded-full border transition ${
+                className={`grid size-[5.5rem] place-items-center overflow-hidden rounded-[1.35rem] border transition ${
                   category === "all"
-                    ? "border-ink ring-2 ring-ink/15"
-                    : "border-rule"
+                    ? "border-olive-deep ring-2 ring-olive/25"
+                    : "border-rule bg-paper-2"
                 }`}
               >
                 <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink">
                   {t("home.allKindsShort")}
                 </span>
               </span>
-              <span className="text-center text-[0.7rem] font-medium uppercase tracking-[0.08em] text-muted">
+              <span className="text-center text-xs font-medium text-muted">
                 {t("home.allKinds")}
               </span>
             </button>
@@ -259,8 +259,10 @@ export function HomePage() {
                   className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
                 >
                   <span
-                    className={`size-[5.5rem] overflow-hidden rounded-full border transition ${
-                      active ? "border-ink ring-2 ring-ink/15" : "border-rule"
+                    className={`size-[5.5rem] overflow-hidden rounded-[1.35rem] border transition ${
+                      active
+                        ? "border-olive-deep ring-2 ring-olive/25"
+                        : "border-rule"
                     }`}
                   >
                     {photo ? (
@@ -277,7 +279,7 @@ export function HomePage() {
                       </span>
                     )}
                   </span>
-                  <span className="line-clamp-2 text-center text-[0.7rem] font-medium uppercase tracking-[0.08em] text-muted">
+                  <span className="line-clamp-2 text-center text-xs font-medium text-muted">
                     {categoryLabel(value, t)}
                   </span>
                 </button>
@@ -343,7 +345,7 @@ export function HomePage() {
           )}
         </section>
 
-        <section className="border border-rule/80 bg-paper-2/60 px-6 py-10 sm:px-10">
+        <section className="rounded-[1.75rem] border border-rule/80 bg-sage/35 px-6 py-10 shadow-sm sm:px-10">
           <p className="font-display text-3xl font-semibold tracking-tight text-ink">
             {t("home.contactTitle")}
           </p>

@@ -65,10 +65,13 @@ export function LoginForm() {
         />
       </div>
       {error ? <p className="text-sm text-sold">{error}</p> : null}
-      <button type="submit" disabled={pending} className="btn btn-primary w-full py-3">
+      <button
+        type="submit"
+        disabled={pending}
+        className="btn btn-primary w-full min-h-12 py-3"
+      >
         {pending ? t("studio.opening") : t("studio.enter")}
       </button>
-      <p className="text-center text-sm text-muted">{t("studio.inviteOnly")}</p>
     </form>
   );
 }

@@ -8,7 +8,7 @@ export function Footer({ shop }: { shop?: Shop }) {
   const brand = shop?.name?.trim() || "Velviera";
 
   return (
-    <footer className="mt-auto border-t border-rule/80 bg-paper-2/50 px-5 py-12 sm:px-8">
+    <footer className="mt-auto border-t border-rule/80 bg-paper-2/70 px-5 py-12 sm:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 text-sm text-muted">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-md space-y-3">
@@ -26,18 +26,15 @@ export function Footer({ shop }: { shop?: Shop }) {
                 compact
               />
             ) : null}
-            <nav className="flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-[0.14em]">
-              <Link href="/privacy" className="hover:text-ink">
+            <nav className="flex flex-wrap items-center gap-3">
+              <Link href="/privacy" className="btn btn-nav min-h-10">
                 {t("footer.privacy")}
               </Link>
-              <Link href="/terms" className="hover:text-ink">
+              <Link href="/terms" className="btn btn-nav min-h-10">
                 {t("footer.terms")}
               </Link>
-              <Link
-                href="/studio/login"
-                className="text-muted/70 hover:text-muted"
-              >
-                {t("footer.ownerLogin")}
+              <Link href="/studio/login" className="btn btn-secondary min-h-10">
+                {t("header.studio")}
               </Link>
             </nav>
           </div>
