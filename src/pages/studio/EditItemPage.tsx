@@ -34,7 +34,11 @@ export function EditItemPage() {
 
   return (
     <StudioShell shop={shop}>
-      <ItemForm item={item} currencySymbol={shop.currencySymbol} />
+      <ItemForm
+        item={item}
+        currencySymbol={shop.currencySymbol}
+        categories={shop.categories}
+      />
     </StudioShell>
   );
 }

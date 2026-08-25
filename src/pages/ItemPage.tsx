@@ -3,13 +3,11 @@ import { useTranslation } from "react-i18next";
 import { CoverPhoto } from "@/components/CoverPhoto";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import {
-  WhatsAppButton,
-  buildWhatsAppMessage,
-} from "@/components/WhatsAppButton";
+import { ContactLinks } from "@/components/ContactLinks";
+import { buildWhatsAppMessage } from "@/components/WhatsAppButton";
 import { Link, useParams } from "@/i18n/navigation";
 import { api } from "@/lib/api";
-import { formatPrice } from "@/lib/catalog/format";
+import { categoryLabel, formatPrice } from "@/lib/catalog/format";
 import type { Item, Shop } from "@/lib/catalog/types";
 
 export function ItemPage() {
@@ -49,7 +47,7 @@ export function ItemPage() {
     return (
       <div className="space-y-4 p-8">
         <p className="text-muted">{t("item.unpublishedHidden")}</p>
-        <Link href="/" className="text-sm font-medium text-olive hover:underline">
+        <Link href="/" className="text-sm font-medium text-olive-deep hover:underline">
           {t("item.back")}
         </Link>
       </div>
@@ -81,7 +79,7 @@ export function ItemPage() {
   return (
     <div className="flex min-h-full flex-col pb-24 sm:pb-0">
       <Header shop={shop} />
-      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-4 px-5 py-6 lg:grid-cols-[1.05fr_0.95fr] sm:px-8 sm:py-8">
+      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-5 py-6 lg:grid-cols-[1.05fr_0.95fr] sm:px-8 sm:py-10">
         <div className="space-y-3">
           {(item.photos.length > 0 ? item.photos : [undefined]).map(
             (src, index) => (
@@ -93,7 +91,7 @@ export function ItemPage() {
                 soldLabel={t("status.sold")}
                 emptyLabel={t("form.noPhoto")}
                 priority={index === 0}
-                className="aspect-square max-h-[70vh] w-full shadow-sm"
+                className="aspect-[4/5] max-h-[75vh] w-full rounded-[28px] shadow-sm ring-1 ring-rule/50"
               />
             ),
           )}
@@ -103,30 +101,27 @@ export function ItemPage() {
               src={src}
               controls
               preload="metadata"
-              className="w-full rounded-[22px] shadow-sm"
+              className="w-full rounded-[28px] shadow-sm ring-1 ring-rule/50"
             />
           ))}
         </div>
-        <div className="rounded-[28px] bg-paper-2 p-6 shadow-sm lg:self-start">
+        <div className="rounded-[28px] bg-paper-2 p-6 shadow-sm ring-1 ring-rule/50 lg:sticky lg:top-28 lg:self-start sm:p-8">
           <Link href="/" className="btn btn-secondary min-h-10 text-sm">
             {t("item.back")}
           </Link>
-          <p className="mt-5 text-sm font-medium text-muted">
-            {item.code} ·{" "}
-            {item.category
-              ? t(`category.${item.category}`)
-              : t("category.unsorted")}
+          <p className="mt-6 text-sm font-medium text-muted">
+            {categoryLabel(item.category, t)}
             {" · "}
             {t(`status.${item.status}`)}
           </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+          <h1 className="font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             {item.title}
           </h1>
-          <p className="mt-3 text-2xl font-semibold">
+          <p className="mt-3 text-2xl font-semibold text-olive-deep">
             {formatPrice(item.price, shop.currencySymbol, ask)}
           </p>
           {item.description ? (
-            <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-ink">
+            <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
               {item.description}
             </p>
           ) : null}
@@ -134,7 +129,7 @@ export function ItemPage() {
             {(item.sizes.length > 0 ? item.sizes : [ask]).map((size) => (
               <span
                 key={size}
-                className="rounded-[12px] bg-paper px-3 py-2 text-sm font-medium"
+                className="rounded-full bg-paper px-3.5 py-2 text-sm font-medium"
               >
                 {size}
               </span>
@@ -145,7 +140,7 @@ export function ItemPage() {
               .map((color) => (
                 <span
                   key={color}
-                  className="rounded-[12px] bg-paper px-3 py-2 text-sm font-medium"
+                  className="rounded-full bg-paper px-3.5 py-2 text-sm font-medium"
                 >
                   {color}
                 </span>
@@ -182,7 +177,7 @@ export function ItemPage() {
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted"
+                  className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted"
                 >
                   {tag}
                 </span>
@@ -190,18 +185,15 @@ export function ItemPage() {
             </div>
           ) : null}
           {item.status !== "sold" ? (
-            <div className="mt-6 hidden sm:block">
-              <WhatsAppButton
-                shop={shop}
-                label={t("item.whatsapp")}
-                hint={t("item.whatsappHint")}
-                message={message}
-                missingLabel={t("item.contactUnset")}
-              />
+            <div className="mt-8 hidden space-y-3 sm:block">
+              <ContactLinks shop={shop} whatsappMessage={message} />
+              <p className="text-center text-xs text-muted">
+                {t("item.whatsappHint")}
+              </p>
             </div>
           ) : null}
           {item.notes ? (
-            <div className="mt-6 rounded-[20px] bg-paper p-4">
+            <div className="mt-6 rounded-[20px] bg-sage/40 p-4">
               <p className="text-xs font-medium text-muted">
                 {t("item.sellerNote")}
               </p>
@@ -212,14 +204,7 @@ export function ItemPage() {
       </main>
       {item.status !== "sold" ? (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-paper-2/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:hidden">
-          <WhatsAppButton
-            shop={shop}
-            label={t("item.whatsapp")}
-            hint={t("item.whatsappHint")}
-            message={message}
-            missingLabel={t("item.contactUnset")}
-            compact
-          />
+          <ContactLinks shop={shop} whatsappMessage={message} compact />
         </div>
       ) : null}
       <Footer shop={shop} />
@@ -229,7 +214,7 @@ export function ItemPage() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[16px] bg-paper px-3 py-3">
+    <div className="rounded-[18px] bg-paper px-3.5 py-3">
       <dt className="text-xs text-muted">{label}</dt>
       <dd className="mt-1 font-medium">{value}</dd>
     </div>

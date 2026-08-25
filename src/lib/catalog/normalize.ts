@@ -1,18 +1,35 @@
 import { flattenMedia, nextProductCode } from "@/lib/catalog/codes";
-import type { Item, ItemInput, Shop, ShopInput } from "@/lib/catalog/types";
+import {
+  DEFAULT_SHOP_CATEGORIES,
+  type Item,
+  type ItemInput,
+  type Shop,
+  type ShopInput,
+} from "@/lib/catalog/types";
+
+function cleanCategories(list: string[] | undefined): string[] {
+  const cleaned = (list ?? [])
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .slice(0, 40);
+  return cleaned.length > 0 ? [...new Set(cleaned)] : [...DEFAULT_SHOP_CATEGORIES];
+}
 
 export function emptyShop(): Shop {
   return {
     id: "",
-    slug: "dordoi",
-    name: "Dordoi",
+    slug: "velviera",
+    name: "Velviera",
     tagline: "",
-    location: "Дордой базар, Бишкек",
+    location: "Бишкек",
     whatsapp: process.env.SHOP_WHATSAPP || "",
+    instagram: "",
+    telegram: "",
     currency: "KGS",
     currencySymbol: "сом",
     logoUrl: "",
     coverUrl: "",
+    categories: [...DEFAULT_SHOP_CATEGORIES],
   };
 }
 
@@ -25,10 +42,13 @@ export function normalizeShop(shop: Partial<Shop> | undefined): Shop {
     tagline: shop?.tagline ?? "",
     location: shop?.location || base.location,
     whatsapp: shop?.whatsapp || process.env.SHOP_WHATSAPP || "",
+    instagram: shop?.instagram ?? "",
+    telegram: shop?.telegram ?? "",
     currency: shop?.currency || base.currency,
     currencySymbol: shop?.currencySymbol || base.currencySymbol,
     logoUrl: shop?.logoUrl ?? "",
     coverUrl: shop?.coverUrl ?? "",
+    categories: cleanCategories(shop?.categories),
   };
 }
 
@@ -43,10 +63,22 @@ export function applyShopInput(current: Shop, input: ShopInput): Shop {
       input.whatsapp === undefined
         ? current.whatsapp
         : input.whatsapp.replace(/\D/g, ""),
+    instagram:
+      input.instagram === undefined
+        ? current.instagram
+        : input.instagram.trim().replace(/^@/, ""),
+    telegram:
+      input.telegram === undefined
+        ? current.telegram
+        : input.telegram.trim().replace(/^@/, ""),
     currency: input.currency?.trim() || current.currency,
     currencySymbol: input.currencySymbol?.trim() || current.currencySymbol,
     logoUrl: input.logoUrl === undefined ? current.logoUrl : input.logoUrl,
     coverUrl: input.coverUrl === undefined ? current.coverUrl : input.coverUrl,
+    categories:
+      input.categories === undefined
+        ? current.categories
+        : cleanCategories(input.categories),
   });
 }
 

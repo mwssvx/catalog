@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CATEGORIES, CONDITIONS, STATUSES } from "@/lib/catalog/types";
+import { CONDITIONS, STATUSES } from "@/lib/catalog/types";
 
 export const loginSchema = z
   .object({
@@ -8,7 +8,7 @@ export const loginSchema = z
   })
   .strict();
 
-export const categorySchema = z.enum(CATEGORIES);
+export const categorySchema = z.string().trim().min(1).max(80);
 export const conditionSchema = z.enum(CONDITIONS);
 export const statusSchema = z.enum(STATUSES);
 
@@ -136,10 +136,13 @@ export const shopUpdateSchema = z
     tagline: z.string().max(400).optional(),
     location: z.string().max(200).optional(),
     whatsapp: z.string().max(32).optional(),
+    instagram: z.string().max(120).optional(),
+    telegram: z.string().max(120).optional(),
     currency: z.string().trim().min(1).max(8).optional(),
     currencySymbol: z.string().trim().min(1).max(12).optional(),
     logoUrl: z.string().max(2000).optional(),
     coverUrl: z.string().max(2000).optional(),
+    categories: z.array(z.string().trim().min(1).max(80)).max(40).optional(),
   })
   .strict();
 

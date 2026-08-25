@@ -13,7 +13,12 @@ export function supabaseUrl(): string {
   if (!value) {
     throw new ConfigError("Missing SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL)");
   }
-  return value;
+  if (!/^https?:\/\/.+\.supabase\.co\/?$/i.test(value)) {
+    throw new ConfigError(
+      "SUPABASE_URL must be a full https://xxxx.supabase.co URL (not a truncated placeholder)",
+    );
+  }
+  return value.replace(/\/$/, "");
 }
 
 export function supabaseAnonKey(): string {
@@ -21,6 +26,16 @@ export function supabaseAnonKey(): string {
   if (!value) {
     throw new ConfigError(
       "Missing SUPABASE_ANON_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY)",
+    );
+  }
+  if (value.startsWith("sb_publishable_")) {
+    throw new ConfigError(
+      "SUPABASE_ANON_KEY must be the legacy anon JWT (eyJ...), not a publishable key (sb_publishable_...)",
+    );
+  }
+  if (value.length < 100) {
+    throw new ConfigError(
+      "SUPABASE_ANON_KEY looks truncated — paste the full legacy anon JWT from Supabase",
     );
   }
   return value;

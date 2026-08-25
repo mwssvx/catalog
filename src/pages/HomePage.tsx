@@ -5,8 +5,10 @@ import { CatalogFilters } from "@/components/CatalogFilters";
 import { CatalogGrid } from "@/components/CatalogGrid";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { ContactLinks } from "@/components/ContactLinks";
 import { api } from "@/lib/api";
+import { categoryLabel } from "@/lib/catalog/format";
+import { DEFAULT_SHOP_CATEGORIES } from "@/lib/catalog/types";
 import type { Category, Item, ItemFilters, Shop } from "@/lib/catalog/types";
 
 type HomeData = {
@@ -20,7 +22,8 @@ type HomeData = {
 export function HomePage() {
   const { t } = useTranslation("translation");
   const [searchParams, setSearchParams] = useSearchParams();
-  const status = (searchParams.get("status") as ItemFilters["status"]) || "available";
+  const status =
+    (searchParams.get("status") as ItemFilters["status"]) || "available";
   const category = (searchParams.get("category") as Category | "all") || "all";
   const size = searchParams.get("size") || "all";
   const q = searchParams.get("q") || undefined;
@@ -94,54 +97,58 @@ export function HomePage() {
   const availableCount = allItems.filter(
     (item) => item.status === "in_stock" || item.status === "reserved",
   ).length;
+  const categories =
+    shop.categories?.length > 0 ? shop.categories : DEFAULT_SHOP_CATEGORIES;
+  const brandName = shop.name?.trim() || "Velviera";
+
+  function setCategory(next: string) {
+    const params = new URLSearchParams(searchParams);
+    if (next && next !== "all") params.set("category", next);
+    else params.delete("category");
+    setSearchParams(params, { replace: true });
+  }
 
   return (
     <div className="flex min-h-full flex-col">
       <Header shop={shop} />
-      <main className="mx-auto w-full max-w-6xl flex-1 space-y-5 px-5 py-5 sm:space-y-6 sm:px-8 sm:py-8">
+      <section className="relative min-h-[78vh] w-full overflow-hidden sm:min-h-[85vh]">
         {shop.coverUrl ? (
           <img
             src={shop.coverUrl}
             alt=""
             loading="eager"
             decoding="async"
-            className="h-32 w-full rounded-[28px] object-cover shadow-sm sm:h-48"
+            className="absolute inset-0 h-full w-full object-cover"
           />
-        ) : null}
-        <section className="rounded-[28px] bg-paper-2 px-5 py-6 shadow-sm sm:px-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-olive">
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(135deg, #f7e4df 0%, #f7f1ea 45%, #e8d5ce 100%)",
+            }}
+          />
+        )}
+        <div className="hero-veil absolute inset-0" />
+        <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-5 pb-12 pt-28 sm:min-h-[85vh] sm:justify-center sm:px-8 sm:pb-20 sm:pt-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-olive-deep sm:text-olive">
             {shop.location || t("home.locationFallback")}
           </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            {shop.name}
+          <h1 className="font-display mt-3 text-5xl font-semibold tracking-tight text-ink sm:text-7xl">
+            {brandName}
           </h1>
-          <p className="mt-2 max-w-xl text-base text-ink">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">
             {shop.tagline?.trim() || t("home.subtitle")}
           </p>
-          <form
-            className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const form = new FormData(event.currentTarget);
-              const next = new URLSearchParams(searchParams);
-              const query = String(form.get("q") || "").trim();
-              if (query) next.set("q", query);
-              else next.delete("q");
-              setSearchParams(next);
-            }}
-          >
-            <input
-              type="search"
-              name="q"
-              defaultValue={q}
-              placeholder={t("home.search")}
-              className="field min-h-11 flex-1 sm:max-w-md"
-            />
-            <button type="submit" className="btn btn-primary min-h-11">
-              {t("home.searchAction")}
-            </button>
-          </form>
-        </section>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#catalog" className="btn btn-primary min-h-12 px-6">
+              {t("home.explore")}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <main className="mx-auto w-full max-w-6xl flex-1 space-y-10 px-5 py-10 sm:px-8 sm:py-14">
         {error ? (
           <div className="flex flex-wrap items-center gap-3 rounded-[20px] bg-paper-2 px-4 py-3 text-sm shadow-sm">
             <p className="text-sold">{error}</p>
@@ -154,35 +161,134 @@ export function HomePage() {
             </button>
           </div>
         ) : null}
-        <CatalogFilters
-          status={status || "available"}
-          category={category}
-          size={size}
-          q={q}
-          sizes={sizes}
-          counts={{ all: allItems.length, available: availableCount }}
-        />
-        {loading ? (
-          <p className="text-muted">{t("common.loading")}</p>
-        ) : (
-          <CatalogGrid
-            items={items}
-            currencySymbol={shop.currencySymbol}
-            shop={shop}
+
+        <section className="space-y-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
+              {t("home.shopByCategory")}
+            </p>
+            <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight">
+              {t("home.categoriesTitle")}
+            </h2>
+          </div>
+          <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
+            <button
+              type="button"
+              onClick={() => setCategory("all")}
+              className={`flex w-24 shrink-0 flex-col items-center gap-2 ${
+                category === "all" ? "opacity-100" : "opacity-80 hover:opacity-100"
+              }`}
+            >
+              <span
+                className={`grid size-20 place-items-center rounded-full border text-sm font-semibold ${
+                  category === "all"
+                    ? "border-olive-deep bg-olive-deep text-white"
+                    : "border-rule bg-paper-2 text-ink"
+                }`}
+              >
+                {t("home.allKindsShort")}
+              </span>
+              <span className="text-center text-xs font-medium text-muted">
+                {t("home.allKinds")}
+              </span>
+            </button>
+            {categories.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setCategory(value)}
+                className={`flex w-24 shrink-0 flex-col items-center gap-2 ${
+                  category === value
+                    ? "opacity-100"
+                    : "opacity-80 hover:opacity-100"
+                }`}
+              >
+                <span
+                  className={`grid size-20 place-items-center rounded-full border text-center text-[11px] font-semibold leading-tight ${
+                    category === value
+                      ? "border-olive-deep bg-olive-deep text-white"
+                      : "border-rule bg-sage/50 text-ink"
+                  }`}
+                >
+                  {categoryLabel(value, t)}
+                </span>
+                <span className="line-clamp-2 text-center text-xs font-medium text-muted">
+                  {categoryLabel(value, t)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section id="catalog" className="scroll-mt-28 space-y-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-olive">
+                {t("home.catalogEyebrow")}
+              </p>
+              <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight">
+                {t("home.catalogTitle")}
+              </h2>
+            </div>
+            <form
+              className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const form = new FormData(event.currentTarget);
+                const next = new URLSearchParams(searchParams);
+                const query = String(form.get("q") || "").trim();
+                if (query) next.set("q", query);
+                else next.delete("q");
+                setSearchParams(next);
+              }}
+            >
+              <input
+                type="search"
+                name="q"
+                defaultValue={q}
+                placeholder={t("home.search")}
+                className="field min-h-11 flex-1"
+              />
+              <button type="submit" className="btn btn-secondary min-h-11">
+                {t("home.searchAction")}
+              </button>
+            </form>
+          </div>
+
+          <CatalogFilters
+            status={status || "available"}
+            category={category}
+            size={size}
+            q={q}
+            sizes={sizes}
+            categories={categories}
+            counts={{ all: allItems.length, available: availableCount }}
+            hideCategories
           />
-        )}
-        <div className="rounded-[24px] bg-paper-2 px-5 py-5 shadow-sm">
-          <p className="text-sm font-medium text-ink">{t("home.contactTitle")}</p>
-          <p className="mt-1 text-sm text-muted">{t("home.contactHelp")}</p>
-          <WhatsAppButton
-            shop={shop}
-            label={t("home.whatsapp")}
-            hint={t("home.whatsappHint")}
-            message={t("home.whatsappMessage", { shop: shop.name })}
-            compact
-            missingLabel={t("item.contactUnset")}
-          />
-        </div>
+
+          {loading ? (
+            <p className="text-muted">{t("common.loading")}</p>
+          ) : (
+            <CatalogGrid
+              items={items}
+              currencySymbol={shop.currencySymbol}
+              shop={shop}
+            />
+          )}
+        </section>
+
+        <section className="rounded-[28px] bg-sage/40 px-5 py-8 sm:px-8">
+          <p className="font-display text-2xl font-semibold tracking-tight text-ink">
+            {t("home.contactTitle")}
+          </p>
+          <p className="mt-2 max-w-lg text-sm text-muted">{t("home.contactHelp")}</p>
+          <div className="mt-5">
+            <ContactLinks
+              shop={shop}
+              whatsappMessage={t("home.whatsappMessage", { shop: brandName })}
+            />
+          </div>
+        </section>
       </main>
       <Footer shop={shop} />
     </div>

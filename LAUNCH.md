@@ -16,16 +16,9 @@ Ops steps that need your cloud logins. App polish is in the codebase; Supabase s
 
 ### 1) SQL migrations (required)
 
-Columns `logo_url`, board `version`, `ai_jobs.kind` are **still missing**.
+Run [`supabase/pending.sql`](supabase/pending.sql) in Supabase → **SQL Editor** (includes logo/cover, Instagram, Telegram, and owner categories).
 
-**Fastest:** Supabase → **SQL Editor** → paste and run [`supabase/pending.sql`](supabase/pending.sql).
-
-**Or:** add `DATABASE_URL` to `.env.local`, then:
-
-```bash
-npm run migrate:sql
-npm run schema:check
-```
+Without this, branding / contact links / custom categories may not save.
 
 ### 2) Real WhatsApp
 

@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { ItemCard } from "@/components/ItemCard";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { Link } from "@/i18n/navigation";
+import { ContactLinks } from "@/components/ContactLinks";
 import type { Item, Shop } from "@/lib/catalog/types";
 
 export function CatalogGrid({
@@ -25,18 +24,12 @@ export function CatalogGrid({
           {t("home.empty")}
         </p>
         {shop ? (
-          <div className="mt-5 flex flex-col items-center gap-3">
-            <WhatsAppButton
+          <div className="mt-5 flex justify-center">
+            <ContactLinks
               shop={shop}
-              label={t("home.whatsapp")}
-              hint={t("home.whatsappHint")}
-              message={t("home.whatsappMessage", { shop: shop.name })}
+              whatsappMessage={t("home.whatsappMessage", { shop: shop.name })}
               compact
-              missingLabel={t("item.contactUnset")}
             />
-            <Link href="/studio/new" className="btn btn-secondary">
-              {t("home.emptyAdd")}
-            </Link>
           </div>
         ) : null}
       </div>

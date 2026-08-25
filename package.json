@@ -18,6 +18,7 @@
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
     "@fontsource/manrope": "^5.2.8",
     "@hono/node-server": "^1.19.0",
     "@supabase/ssr": "^0.12.4",

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
-import { CATEGORIES } from "@/lib/catalog/types";
+import { categoryLabel } from "@/lib/catalog/format";
+import { DEFAULT_SHOP_CATEGORIES } from "@/lib/catalog/types";
 
 type CatalogFiltersProps = {
   status: string;
@@ -8,7 +9,10 @@ type CatalogFiltersProps = {
   size: string;
   q?: string;
   sizes: string[];
+  categories?: string[];
   counts: { all: number; available: number };
+  /** When categories are shown elsewhere (e.g. home shop-by-category strip). */
+  hideCategories?: boolean;
 };
 
 function chipClass(active: boolean) {
@@ -18,6 +22,10 @@ function chipClass(active: boolean) {
 export function CatalogFilters(props: CatalogFiltersProps) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const categories =
+    props.categories && props.categories.length > 0
+      ? props.categories
+      : DEFAULT_SHOP_CATEGORIES;
 
   function apply(next: {
     status?: string;
@@ -54,25 +62,27 @@ export function CatalogFilters(props: CatalogFiltersProps) {
           {t("home.allItems", { count: props.counts.all })}
         </button>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => apply({ category: "all" })}
-          className={chipClass(props.category === "all")}
-        >
-          {t("home.allKinds")}
-        </button>
-        {CATEGORIES.map((category) => (
+      {!props.hideCategories ? (
+        <div className="flex flex-wrap gap-2">
           <button
-            key={category}
             type="button"
-            onClick={() => apply({ category })}
-            className={chipClass(props.category === category)}
+            onClick={() => apply({ category: "all" })}
+            className={chipClass(props.category === "all")}
           >
-            {t(`category.${category}`)}
+            {t("home.allKinds")}
           </button>
-        ))}
-      </div>
+          {categories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => apply({ category })}
+              className={chipClass(props.category === category)}
+            >
+              {categoryLabel(category, t)}
+            </button>
+          ))}
+        </div>
+      ) : null}
       {props.sizes.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           <button

@@ -11,10 +11,13 @@ export type PublicShop = {
   tagline: string;
   location: string;
   whatsapp: string;
+  instagram: string;
+  telegram: string;
   currency: string;
   currencySymbol: string;
   logoUrl: string;
   coverUrl: string;
+  categories: string[];
 };
 
 export function isOwnerOf(viewer: Viewer | null, shopId: string): boolean {
@@ -48,9 +51,14 @@ export function publicShopFields(shop: PublicShop): PublicShop {
     tagline: shop.tagline,
     location: shop.location,
     whatsapp: shop.whatsapp,
+    instagram: shop.instagram ?? "",
+    telegram: shop.telegram ?? "",
     currency: shop.currency,
     currencySymbol: shop.currencySymbol,
     logoUrl: shop.logoUrl ?? "",
     coverUrl: shop.coverUrl ?? "",
+    categories: shop.categories?.length
+      ? shop.categories
+      : ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
   };
 }

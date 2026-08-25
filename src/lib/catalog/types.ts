@@ -11,9 +11,19 @@ export const CONDITIONS = ["new", "like-new", "good", "worn"] as const;
 
 export const STATUSES = ["in_stock", "reserved", "sold", "hidden"] as const;
 
-export type Category = (typeof CATEGORIES)[number];
+/** Built-in category keys; shops may also define custom labels. */
+export type Category = (typeof CATEGORIES)[number] | (string & {});
 export type Condition = (typeof CONDITIONS)[number];
 export type Status = (typeof STATUSES)[number];
+
+/** Default catalog facets for Velviera sleepwear (shops may customize). */
+export const DEFAULT_SHOP_CATEGORIES: string[] = [
+  "sets",
+  "nightdresses",
+  "robes",
+  "loungewear",
+  "accessories",
+];
 
 export type ProductVariant = {
   id: string;
@@ -66,10 +76,14 @@ export type Shop = {
   tagline: string;
   location: string;
   whatsapp: string;
+  instagram: string;
+  telegram: string;
   currency: string;
   currencySymbol: string;
   logoUrl: string;
   coverUrl: string;
+  /** Category keys/labels the owner offers in filters and item form. */
+  categories: string[];
 };
 
 export type BoardElementType =
@@ -156,7 +170,7 @@ export type ItemInput = {
 
 export type ItemFilters = {
   status?: Status | "available" | "all";
-  category?: Category | "all";
+  category?: string | "all";
   size?: string | "all";
   published?: boolean;
   missing?: boolean;
@@ -169,10 +183,13 @@ export type ShopInput = {
   tagline?: string;
   location?: string;
   whatsapp?: string;
+  instagram?: string;
+  telegram?: string;
   currency?: string;
   currencySymbol?: string;
   logoUrl?: string;
   coverUrl?: string;
+  categories?: string[];
 };
 
 export type BulkItemInput = {

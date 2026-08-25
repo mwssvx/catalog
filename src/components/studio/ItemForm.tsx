@@ -11,10 +11,12 @@ import { splitCsv } from "@/lib/catalog/studio-actions";
 import {
   CATEGORIES,
   CONDITIONS,
+  DEFAULT_SHOP_CATEGORIES,
   STATUSES,
   type Item,
   type ProductVariant,
 } from "@/lib/catalog/types";
+import { categoryLabel } from "@/lib/catalog/format";
 
 function slotsFrom(urls: string[], kind: "image" | "video"): MediaSlot[] {
   return urls.map((url) => ({ url, kind }));
@@ -37,9 +39,16 @@ function asUuid(id: string): string {
     : crypto.randomUUID();
 }
 
-type ItemFormProps = { item?: Item; currencySymbol?: string };
+type ItemFormProps = {
+  item?: Item;
+  currencySymbol?: string;
+  categories?: string[];
+};
 
-export function ItemForm({ item }: ItemFormProps) {
+export function ItemForm({
+  item,
+  categories = DEFAULT_SHOP_CATEGORIES,
+}: ItemFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [notes, setNotes] = useState(item?.notes ?? "");
@@ -393,9 +402,9 @@ export function ItemForm({ item }: ItemFormProps) {
             className="field"
           >
             <option value="">{t("category.unsorted")}</option>
-            {CATEGORIES.map((value) => (
+            {(categories.length > 0 ? categories : [...CATEGORIES]).map((value) => (
               <option key={value} value={value}>
-                {t(`category.${value}`)}
+                {categoryLabel(value, t)}
               </option>
             ))}
           </select>

@@ -36,6 +36,8 @@ import {
 } from "@/lib/catalog/studio-actions";
 
 const SHOP_SELECT_FULL =
+  "id, slug, name, tagline, location, whatsapp, instagram, telegram, currency, currency_symbol, logo_url, cover_url, categories";
+const SHOP_SELECT_BRAND =
   "id, slug, name, tagline, location, whatsapp, currency, currency_symbol, logo_url, cover_url";
 const SHOP_SELECT_BASIC =
   "id, slug, name, tagline, location, whatsapp, currency, currency_symbol";
@@ -52,10 +54,13 @@ type ShopRow = {
   tagline: string;
   location: string;
   whatsapp: string;
+  instagram?: string | null;
+  telegram?: string | null;
   currency: string;
   currency_symbol: string;
   logo_url?: string | null;
   cover_url?: string | null;
+  categories?: string[] | null;
 };
 
 type ProductRow = {
@@ -152,10 +157,13 @@ function shopFromRow(row: ShopRow): Shop {
       tagline: row.tagline,
       location: row.location,
       whatsapp: row.whatsapp,
+      instagram: row.instagram ?? "",
+      telegram: row.telegram ?? "",
       currency: row.currency,
       currencySymbol: row.currency_symbol,
       logoUrl: row.logo_url ?? "",
       coverUrl: row.cover_url ?? "",
+      categories: row.categories ?? undefined,
     }),
   );
 }
@@ -235,23 +243,18 @@ export class SupabaseCatalogRepository implements CatalogRepository {
   private async selectShop(
     filter: { column: "slug" | "id"; value: string },
   ): Promise<ShopRow | null> {
-    let query = this.client.from("shops").select(SHOP_SELECT_FULL);
-    query =
-      filter.column === "slug"
-        ? query.eq("slug", filter.value)
-        : query.eq("id", filter.value);
-    const first = await query.maybeSingle();
-    if (!first.error) return (first.data as ShopRow | null) ?? null;
-    if (!isMissingColumnError(first.error)) throw first.error;
-
-    let fallback = this.client.from("shops").select(SHOP_SELECT_BASIC);
-    fallback =
-      filter.column === "slug"
-        ? fallback.eq("slug", filter.value)
-        : fallback.eq("id", filter.value);
-    const second = await fallback.maybeSingle();
-    if (second.error) throw second.error;
-    return (second.data as ShopRow | null) ?? null;
+    const selects = [SHOP_SELECT_FULL, SHOP_SELECT_BRAND, SHOP_SELECT_BASIC];
+    for (const select of selects) {
+      let query = this.client.from("shops").select(select);
+      query =
+        filter.column === "slug"
+          ? query.eq("slug", filter.value)
+          : query.eq("id", filter.value);
+      const result = await query.maybeSingle();
+      if (!result.error) return (result.data as ShopRow | null) ?? null;
+      if (!isMissingColumnError(result.error)) throw result.error;
+    }
+    return null;
   }
 
   async getPublicShop(slug: string): Promise<Shop | null> {
@@ -707,32 +710,58 @@ export class SupabaseCatalogRepository implements CatalogRepository {
   async updateShop(viewer: Viewer, input: ShopInput): Promise<Shop> {
     const current = (await this.loadCatalog(viewer)).shop;
     const next = applyShopInput(current, input);
-    const base = {
-      name: next.name,
-      tagline: next.tagline,
-      location: next.location,
-      whatsapp: next.whatsapp,
-      currency: next.currency,
-      currency_symbol: next.currencySymbol,
-    };
-    const withBrand = {
-      ...base,
-      logo_url: next.logoUrl,
-      cover_url: next.coverUrl,
-    };
-    const first = await this.client
-      .from("shops")
-      .update(withBrand)
-      .eq("id", viewer.shopId);
-    if (first.error && isMissingColumnError(first.error)) {
-      const second = await this.client
+    const payloads = [
+      {
+        name: next.name,
+        tagline: next.tagline,
+        location: next.location,
+        whatsapp: next.whatsapp,
+        instagram: next.instagram,
+        telegram: next.telegram,
+        currency: next.currency,
+        currency_symbol: next.currencySymbol,
+        logo_url: next.logoUrl,
+        cover_url: next.coverUrl,
+        categories: next.categories,
+      },
+      {
+        name: next.name,
+        tagline: next.tagline,
+        location: next.location,
+        whatsapp: next.whatsapp,
+        currency: next.currency,
+        currency_symbol: next.currencySymbol,
+        logo_url: next.logoUrl,
+        cover_url: next.coverUrl,
+      },
+      {
+        name: next.name,
+        tagline: next.tagline,
+        location: next.location,
+        whatsapp: next.whatsapp,
+        currency: next.currency,
+        currency_symbol: next.currencySymbol,
+      },
+    ];
+
+    for (const payload of payloads) {
+      const result = await this.client
         .from("shops")
-        .update(base)
+        .update(payload)
         .eq("id", viewer.shopId);
-      if (second.error) throw second.error;
-      return { ...next, logoUrl: "", coverUrl: "" };
+      if (!result.error) {
+        if (!("instagram" in payload)) {
+          return {
+            ...next,
+            instagram: "",
+            telegram: "",
+            categories: current.categories,
+          };
+        }
+        return next;
+      }
+      if (!isMissingColumnError(result.error)) throw result.error;
     }
-    if (first.error) throw first.error;
     return next;
   }
 

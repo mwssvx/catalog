@@ -1,38 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #eef1f6;
-  --paper-2: #ffffff;
-  --ink: #1c1f26;
-  --ink-soft: #2a303a;
-  --muted: #667085;
-  --rule: #d8dde8;
-  --olive: #2f6fed;
-  --olive-deep: #2458c4;
-  --sold: #e14b40;
+  /* Velviera — soft luxury sleepwear */
+  --paper: #f7f1ea;
+  --paper-2: #fff8f4;
+  --ink: #3a2f2c;
+  --ink-soft: #5c4a45;
+  --muted: #8a7a74;
+  --rule: #eadfd6;
+  --olive: #c97b84;
+  --olive-deep: #b56570;
+  --sage: #d8e2dc;
+  --sold: #c45c52;
   --font-jakarta: "Manrope", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
 }
 
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
   --color-muted: var(--muted);
   --color-rule: var(--rule);
   --color-olive: var(--olive);
+  --color-olive-deep: var(--olive-deep);
   --color-sold: var(--sold);
+  --color-sage: var(--sage);
   --font-sans: var(--font-jakarta);
+  --font-display: var(--font-display);
   --radius-box: 1.5rem;
 }
 
 html {
   background: var(--paper);
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   min-height: 100%;
-  background: var(--paper);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, #fde8e4 0%, transparent 55%),
+    var(--paper);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -40,6 +50,10 @@ body {
 
 #root {
   min-height: 100%;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
 }
 
 .field {
@@ -53,7 +67,7 @@ body {
 
 .field:focus {
   border-color: var(--olive);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olive) 16%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olive) 20%, transparent);
 }
 
 /* Solid controls — never fade to invisible on hover/active */
@@ -62,18 +76,20 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  border-radius: 14px;
-  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  padding: 0.6rem 1.15rem;
   font-size: 0.875rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
   line-height: 1.2;
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
   transition:
-    background-color 0.12s ease,
-    color 0.12s ease,
-    border-color 0.12s ease;
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
@@ -87,20 +103,20 @@ body {
 }
 
 .btn-primary {
-  background: var(--ink);
+  background: var(--olive-deep);
   color: #fff;
-  border-color: var(--ink);
+  border-color: var(--olive-deep);
 }
 
 .btn-primary:hover {
-  background: var(--ink-soft);
-  border-color: var(--ink-soft);
+  background: var(--olive);
+  border-color: var(--olive);
   color: #fff;
 }
 
 .btn-primary:active {
-  background: var(--olive);
-  border-color: var(--olive);
+  background: #9e5560;
+  border-color: #9e5560;
   color: #fff;
 }
 
@@ -111,13 +127,13 @@ body {
 }
 
 .btn-secondary:hover {
-  background: #f4f6fa;
+  background: #f3e8e1;
   color: var(--ink);
-  border-color: #c9d0dd;
+  border-color: #dfcfc4;
 }
 
 .btn-secondary:active {
-  background: #e8ecf3;
+  background: #ead9d0;
   color: var(--ink);
 }
 
@@ -134,13 +150,13 @@ body {
 }
 
 .btn-nav:active {
-  background: #e8ecf3;
+  background: #ead9d0;
   color: var(--ink);
 }
 
 .btn-nav.is-active {
   background: var(--ink);
-  color: #fff;
+  color: #fff8f4;
   border-color: var(--ink);
 }
 
@@ -171,42 +187,62 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 999px;
   background: var(--paper-2);
   border: 1px solid var(--rule);
   color: var(--ink);
-  padding: 0.45rem 0.85rem;
+  padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   transition:
-    background-color 0.12s ease,
-    color 0.12s ease,
-    border-color 0.12s ease;
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .chip:hover {
-  background: #f4f6fa;
+  background: #f3e8e1;
   color: var(--ink);
-  border-color: #c9d0dd;
+  border-color: #dfcfc4;
 }
 
 .chip:active {
-  background: #e8ecf3;
+  background: #ead9d0;
   color: var(--ink);
 }
 
 .chip.is-active {
-  background: var(--ink);
+  background: var(--olive-deep);
   color: #fff;
-  border-color: var(--ink);
+  border-color: var(--olive-deep);
 }
 
 .chip.is-active:hover,
 .chip.is-active:active {
-  background: var(--ink-soft);
+  background: var(--olive);
   color: #fff;
-  border-color: var(--ink-soft);
+  border-color: var(--olive);
+}
+
+.hero-veil {
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--paper) 88%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 55%, transparent) 42%,
+    color-mix(in srgb, var(--paper) 12%, transparent) 100%
+  );
+}
+
+@media (max-width: 640px) {
+  .hero-veil {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--paper) 35%, transparent) 0%,
+      color-mix(in srgb, var(--paper) 82%, transparent) 55%,
+      var(--paper) 100%
+    );
+  }
 }

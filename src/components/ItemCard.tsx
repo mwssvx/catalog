@@ -20,7 +20,7 @@ export function ItemCard({
   return (
     <Link
       href={destination}
-      className="group block rounded-[28px] bg-paper-2 p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      className="group block overflow-hidden rounded-[24px] bg-paper-2 shadow-sm ring-1 ring-rule/60 transition duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       <CoverPhoto
         src={item.photos[0]}
@@ -28,15 +28,14 @@ export function ItemCard({
         sold={item.status === "sold"}
         soldLabel={t("status.sold")}
         emptyLabel={t("form.noPhoto")}
-        className="aspect-square"
+        className="aspect-[3/4] rounded-none"
       />
-      <div className="space-y-2 px-1 pt-3">
+      <div className="space-y-2 px-4 py-4">
         <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold text-olive">{item.code}</p>
-            <h2 className="text-[15px] font-semibold leading-snug">{item.title}</h2>
-          </div>
-          <p className="shrink-0 text-sm font-semibold tabular-nums">
+          <h2 className="min-w-0 text-[15px] font-semibold leading-snug tracking-tight">
+            {item.title}
+          </h2>
+          <p className="shrink-0 text-sm font-semibold tabular-nums text-olive-deep">
             {formatPrice(item.price, currencySymbol, t("item.ask"))}
           </p>
         </div>
@@ -45,24 +44,14 @@ export function ItemCard({
             (size) => (
               <span
                 key={size}
-                className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted"
+                className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted"
               >
                 {size}
               </span>
             ),
           )}
-          {item.quantity != null ? (
-            <span className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted">
-              {t("item.left", { count: item.quantity })}
-            </span>
-          ) : null}
-          {item.material ? (
-            <span className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted">
-              {item.material}
-            </span>
-          ) : null}
           {item.status !== "in_stock" ? (
-            <span className="rounded-[10px] bg-paper px-2 py-1 text-xs font-medium text-muted">
+            <span className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted">
               {statusLabel}
             </span>
           ) : null}

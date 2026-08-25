@@ -14,6 +14,9 @@ const shopA = {
   currencySymbol: "сом",
   logoUrl: "",
   coverUrl: "",
+  instagram: "",
+  telegram: "",
+  categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
 };
 
 const shopB = { ...shopA, id: "shop-b", slug: "other", name: "Other" };

@@ -24,6 +24,9 @@ const shop: Shop = {
   currencySymbol: "сом",
   logoUrl: "",
   coverUrl: "",
+  instagram: "",
+  telegram: "",
+  categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
 };
 
 function catalogWithMedia(urls: string[]): CatalogData {

@@ -20,6 +20,9 @@ const shopA = {
   currencySymbol: "сом",
   logoUrl: "",
   coverUrl: "",
+  instagram: "",
+  telegram: "",
+  categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
 };
 
 function baseItem(over: Partial<Item> & { id: string }): Item {

@@ -1,19 +1,23 @@
 import type { Category, Item } from "@/lib/catalog/types";
 
-const PREFIX: Record<Category, string> = {
+const PREFIX: Record<string, string> = {
   dresses: "D",
   outerwear: "J",
   tops: "T",
   bottoms: "B",
   shoes: "S",
   accessories: "A",
+  sets: "K",
+  nightdresses: "N",
+  robes: "R",
+  loungewear: "L",
 };
 
 export function nextProductCode(
   items: Item[],
   category: Category | null,
 ): string {
-  const prefix = category ? PREFIX[category] : "P";
+  const prefix = (category && PREFIX[category]) || "P";
   const nums = items
     .map((item) => item.code)
     .filter((code): code is string => Boolean(code?.startsWith(prefix)))

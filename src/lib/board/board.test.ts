@@ -28,6 +28,9 @@ const shop = {
   currencySymbol: "сом",
   logoUrl: "",
   coverUrl: "",
+  instagram: "",
+  telegram: "",
+  categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
 };
 
 function media(id: string, x: number, y: number): BoardElement {

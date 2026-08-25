@@ -19,7 +19,10 @@ export function NewItemPage() {
 
   return (
     <StudioShell shop={shop}>
-      <ItemForm currencySymbol={shop.currencySymbol} />
+      <ItemForm
+        currencySymbol={shop.currencySymbol}
+        categories={shop.categories}
+      />
     </StudioShell>
   );
 }

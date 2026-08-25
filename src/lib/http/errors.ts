@@ -58,5 +58,15 @@ export function publicErrorMessage(error: unknown): { status: number; error: str
   if (error instanceof ValidationError) {
     return { status: 400, error: error.message };
   }
+  if (error && typeof error === "object" && "message" in error) {
+    const message = String((error as { message: string }).message);
+    if (/invalid api key|jwt/i.test(message)) {
+      return {
+        status: 503,
+        error:
+          "Invalid Supabase API key. In Vercel use the legacy anon JWT (eyJ...), not sb_publishable_...",
+      };
+    }
+  }
   return { status: 400, error: "Request failed" };
 }

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Каталог Дордой",
-    "description": "Что есть в наличии на точке: цена, размер, материал и сколько осталось."
+    "title": "Velviera",
+    "description": "Velviera — женские пижамы и домашняя одежда. Мягкие комплекты, ночные сорочки и халаты. Заказ через WhatsApp, Instagram или Telegram."
   },
   "common": {
     "loading": "Загружаю…",
@@ -9,50 +9,55 @@
   },
   "header": {
     "studio": "Студия",
-    "sellerStudio": "Админка",
+    "sellerStudio": "Студия",
+    "taglineFallback": "Женские пижамы",
     "catalog": "Каталог",
     "list": "Список",
     "viewShop": "В каталог",
     "addItem": "Добавить",
-    "settings": "Точка"
+    "settings": "Настройки"
   },
   "footer": {
-    "blurb": "Каталог одной точки на Дордое. Без корзины и оплаты на сайте — пишите в WhatsApp.",
+    "blurb": "Velviera — бутик женских пижам. Без корзины на сайте: напишите в WhatsApp, Instagram или Telegram.",
     "privacy": "Конфиденциальность",
     "terms": "Условия",
-    "studio": "Студия продавца",
-    "whatsapp": "WhatsApp",
-    "setWhatsapp": "Указать WhatsApp"
+    "whatsapp": "WhatsApp"
   },
   "legal": {
     "privacyTitle": "Конфиденциальность",
     "termsTitle": "Условия использования",
     "back": "В каталог",
-    "privacyBody": "Этот сайт — витрина одной точки. Покупатели смотрят каталог без аккаунта. Данные о товарах и настройках точки хранятся в базе Supabase. Фото добавляются ссылками https://. Вход в студию продавца использует cookie сессии. WhatsApp открывается у Meta; переписка идёт уже там. Мы не продаём данные покупателей и не ведём корзину или оплату.",
-    "termsBody": "Каталог показывает наличие «как есть». Цены и остатки может менять продавец. Покупка оформляется напрямую в WhatsApp с продавцом — сайт не принимает оплату и не доставляет. Продавец отвечает за точность описаний и законность товаров. Запрещено использовать студию без разрешения владельца точки."
+    "privacyBody": "Этот сайт — витрина магазина Velviera. Покупатели смотрят каталог без аккаунта. Данные о товарах и настройках хранятся в базе Supabase. Фото добавляются ссылками https://. Вход в студию использует cookie сессии. WhatsApp, Instagram и Telegram открываются у соответствующих сервисов; переписка идёт уже там. Мы не продаём данные покупателей и не ведём корзину или оплату.",
+    "termsBody": "Каталог показывает наличие «как есть». Цены и остатки может менять продавец. Покупка оформляется напрямую через WhatsApp, Instagram или Telegram — сайт не принимает оплату и не доставляет. Продавец отвечает за точность описаний и законность товаров. Запрещено использовать студию без разрешения владельца."
   },
   "language": {
     "ru": "RU",
     "ky": "KY"
   },
   "home": {
-    "title": "Что есть в наличии",
-    "subtitle": "Цена и размер в каталоге. Хотите купить — напишите в WhatsApp.",
+    "title": "Каталог",
+    "subtitle": "Мягкие ночи. Лёгкая элегантность каждый день.",
+    "explore": "Смотреть каталог",
+    "shopByCategory": "Категории",
+    "categoriesTitle": "Выберите модель",
+    "allKindsShort": "Все",
+    "catalogEyebrow": "Коллекция",
+    "catalogTitle": "Пижамы и домашняя одежда",
     "available": "В наличии ({count})",
-    "allItems": "Все вещи ({count})",
-    "allKinds": "Все виды",
+    "allItems": "Все модели ({count})",
+    "allKinds": "Все категории",
     "anySize": "Любой размер",
-    "empty": "Загляните позже или напишите продавцу в WhatsApp. Если вы владелец — добавьте вещи в списке.",
+    "empty": "Пока нет моделей в каталоге. Загляните позже или напишите нам.",
     "search": "Поиск по названию или коду",
     "whatsapp": "Написать в WhatsApp",
-    "whatsappHint": "Общие вопросы по точке — сюда.",
-    "whatsappMessage": "Салам! Пишу по каталогу «{shop}».",
+    "whatsappHint": "Вопросы по заказу — сюда.",
+    "whatsappMessage": "Здравствуйте! Пишу по каталогу «{shop}».",
     "emptyTitle": "Сейчас ничего нет в наличии",
-    "emptyAdd": "Добавить вещь",
+    "emptyAdd": "Добавить модель",
     "searchAction": "Найти",
-    "locationFallback": "Дордой",
-    "contactTitle": "Связаться с точкой",
-    "contactHelp": "Вопросы по наличию и цене — сразу в WhatsApp."
+    "locationFallback": "Бишкек",
+    "contactTitle": "Как заказать",
+    "contactHelp": "WhatsApp, Instagram или Telegram — выберите удобный способ."
   },
   "item": {
     "back": "Назад",
@@ -62,30 +67,34 @@
     "quantity": "Сколько осталось",
     "material": "Материал",
     "condition": "Качество",
-    "kind": "Вид",
+    "kind": "Категория",
     "status": "Статус",
     "sizes": "Размеры",
     "left": "осталось {count}",
     "whatsapp": "Написать в WhatsApp",
-    "whatsappHint": "Пишите сюда, если хотите купить. Наличие уже на этой странице.",
-    "whatsappMessage": "Салам! Хочу купить: {code} — {title}. Размер: {size}. Цена: {price}.",
+    "whatsappHint": "Напишите, чтобы заказать. Наличие уже на этой странице.",
+    "whatsappMessage": "Здравствуйте! Хочу заказать: {code} — {title}. Размер: {size}. Цена: {price}.",
     "code": "Код",
     "search": "Поиск по названию или коду",
     "colors": "Цвета",
-    "unpublishedHidden": "Эта вещь ещё не в каталоге.",
-    "contactUnset": "WhatsApp точки пока не указан. Загляните позже или спросите у продавца.",
+    "unpublishedHidden": "Эта модель ещё не в каталоге.",
+    "contactUnset": "Контакты пока не указаны. Загляните позже.",
     "wholesale": "Оптом",
     "wholesaleFrom": "от {count} шт.",
     "origin": "Откуда"
   },
   "category": {
-    "unsorted": "Без вида",
+    "unsorted": "Без категории",
     "tops": "Верх",
     "bottoms": "Низ",
     "outerwear": "Верхняя одежда",
     "dresses": "Платья",
     "shoes": "Обувь",
-    "accessories": "Аксессуары"
+    "accessories": "Аксессуары",
+    "sets": "Комплекты",
+    "nightdresses": "Сорочки",
+    "robes": "Халаты",
+    "loungewear": "Домашняя одежда"
   },
   "condition": {
     "unset": "Не указано",
@@ -193,7 +202,7 @@
     "stacked": "Карточка",
     "title": "Название",
     "untitled": "Без названия",
-    "titlePlaceholder": "Хлопковая рубашка",
+    "titlePlaceholder": "Шёлковый комплект",
     "price": "Цена, сом",
     "sizes": "Размеры",
     "quantity": "Сколько осталось",
@@ -271,6 +280,22 @@
     "whatsappPlaceholder": "996700123456",
     "whatsappHelp": "Код страны без + и пробелов. Пример для Кыргызстана: 996700123456",
     "whatsappRequired": "Укажите рабочий номер WhatsApp (не тестовый 996700000000).",
-    "taglinePlaceholder": "Коротко: что продаёте и как покупать"
+    "taglinePlaceholder": "Мягкие ночи. Лёгкая элегантность.",
+    "instagram": "Instagram",
+    "instagramPlaceholder": "shop_name или @shop_name",
+    "instagramHelp": "Ник или ссылка на профиль Instagram.",
+    "telegram": "Telegram",
+    "telegramPlaceholder": "shop_name или @shop_name",
+    "telegramHelp": "Ник или ссылка Telegram.",
+    "categories": "Категории каталога",
+    "categoriesHelp": "Эти категории видят покупатели на главной. Нажмите на чип, чтобы удалить.",
+    "categoriesPlaceholder": "Например: Комплекты",
+    "categoriesAdd": "Добавить"
+  },
+  "contact": {
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "telegram": "Telegram",
+    "unset": "Контакты пока не указаны. Загляните позже."
   }
 }
