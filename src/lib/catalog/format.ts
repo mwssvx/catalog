@@ -39,8 +39,13 @@ export function instagramHref(value: string): string | null {
       return null;
     }
   }
-  const handle = raw.replace(/^@/, "").replace(/^instagram\.com\//i, "").split(/[/?#]/)[0];
-  if (!/^[a-zA-Z0-9._]{1,30}$/.test(handle)) return null;
+  const handle = raw
+    .replace(/^@/, "")
+    .replace(/^instagram\.com\//i, "")
+    .replace(/^www\.instagram\.com\//i, "")
+    .split(/[/?#]/)[0]
+    .trim();
+  if (!handle || !/^[a-zA-Z0-9._]{1,30}$/.test(handle)) return null;
   return `https://instagram.com/${handle}`;
 }
 

@@ -1,3 +1,5 @@
+import { DEFAULT_SHOP_CATEGORIES } from "@/lib/catalog/types";
+
 export type Viewer = {
   userId: string;
   shopId: string;
@@ -59,6 +61,6 @@ export function publicShopFields(shop: PublicShop): PublicShop {
     coverUrl: shop.coverUrl ?? "",
     categories: shop.categories?.length
       ? shop.categories
-      : ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
+      : [...DEFAULT_SHOP_CATEGORIES],
   };
 }

@@ -283,6 +283,7 @@
     "saving": "Сохраняю…",
     "saved": "Сохранено.",
     "saveError": "Не получилось сохранить.",
+    "schemaMissing": "В базе нет колонок Instagram/Telegram. Откройте Supabase → SQL Editor, вставьте файл supabase/pending.sql и нажмите Run, затем сохраните снова.",
     "whatsappPlaceholder": "996700123456",
     "whatsappHelp": "Код страны без + и пробелов. Пример для Кыргызстана: 996700123456",
     "whatsappRequired": "Укажите рабочий номер WhatsApp (не тестовый 996700000000).",

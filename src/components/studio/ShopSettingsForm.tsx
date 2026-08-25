@@ -64,14 +64,15 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
       }
       const response = await fetch("/api/v1/shop", {
         method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           tagline,
           location,
           whatsapp: whatsappDigits(whatsapp),
-          instagram,
-          telegram,
+          instagram: instagram.trim(),
+          telegram: telegram.trim(),
           categories,
           currency,
           currencySymbol,
@@ -79,8 +80,24 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           coverUrl: cover[0] ? persistableUrl(cover[0].url) : "",
         }),
       });
-      const payload = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(payload.error || t("saveError"));
+      const payload = (await response.json()) as {
+        error?: string;
+        shop?: Shop;
+      };
+      if (!response.ok) {
+        const message = payload.error || t("saveError");
+        if (/instagram|telegram|categories|logo|cover|pending\.sql|columns are missing/i.test(message)) {
+          throw new Error(t("schemaMissing"));
+        }
+        throw new Error(message);
+      }
+      if (payload.shop) {
+        setInstagram(payload.shop.instagram ?? "");
+        setTelegram(payload.shop.telegram ?? "");
+        setCategories(
+          payload.shop.categories?.length ? [...payload.shop.categories] : [],
+        );
+      }
       setSaved(true);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : t("saveError"));

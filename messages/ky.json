@@ -283,6 +283,7 @@
     "saving": "Сакталууда…",
     "saved": "Сакталды.",
     "saveError": "Сакталган жок.",
+    "schemaMissing": "Базада Instagram/Telegram колонкалары жок. Supabase → SQL Editor'ге supabase/pending.sql файлын коюп Run басыңыз, андан кийин кайра сактаңыз.",
     "whatsappPlaceholder": "996700123456",
     "whatsappHelp": "Өлкө коду + жана боштуксуз. Кыргызстан үчүн мисал: 996700123456",
     "whatsappRequired": "Иштеген WhatsApp номерин жазыңыз (тесттик 996700000000 эмес).",

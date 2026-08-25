@@ -25,6 +25,10 @@ import type {
   Suggestion,
 } from "@/lib/catalog/types";
 import { ConflictError } from "@/lib/http/errors";
+import {
+  joinShopTagline,
+  splitShopTagline,
+} from "@/lib/catalog/shop-extras";
 import { parseMediaRef, persistableUrl } from "@/lib/media/delivery";
 import { displayUrlForRecord, persistBoard, resolveBoard } from "@/lib/media/resolve";
 import { SupabaseMediaTable } from "@/lib/media/supabase-table";
@@ -149,21 +153,22 @@ function toNumber(value: number | string | null): number | null {
 }
 
 function shopFromRow(row: ShopRow): Shop {
+  const { tagline, extras } = splitShopTagline(row.tagline ?? "");
   return publicShopFields(
     normalizeShop({
       id: row.id,
       slug: row.slug,
       name: row.name,
-      tagline: row.tagline,
+      tagline,
       location: row.location,
       whatsapp: row.whatsapp,
-      instagram: row.instagram ?? "",
-      telegram: row.telegram ?? "",
+      instagram: row.instagram ?? extras.instagram ?? "",
+      telegram: row.telegram ?? extras.telegram ?? "",
       currency: row.currency,
       currencySymbol: row.currency_symbol,
-      logoUrl: row.logo_url ?? "",
-      coverUrl: row.cover_url ?? "",
-      categories: row.categories ?? undefined,
+      logoUrl: row.logo_url ?? extras.logoUrl ?? "",
+      coverUrl: row.cover_url ?? extras.coverUrl ?? "",
+      categories: row.categories ?? extras.categories,
     }),
   );
 }
@@ -502,21 +507,33 @@ export class SupabaseCatalogRepository implements CatalogRepository {
     }
 
     {
-      const withBrand = await this.client
+      const extras = {
+        instagram: data.shop.instagram,
+        telegram: data.shop.telegram,
+        categories: data.shop.categories,
+        logoUrl: data.shop.logoUrl,
+        coverUrl: data.shop.coverUrl,
+      };
+      const withContacts = await this.client
         .from("shops")
         .update({
           name: data.shop.name,
           tagline: data.shop.tagline,
           location: data.shop.location,
           whatsapp: data.shop.whatsapp,
+          instagram: data.shop.instagram,
+          telegram: data.shop.telegram,
           currency: data.shop.currency,
           currency_symbol: data.shop.currencySymbol,
           logo_url: data.shop.logoUrl ?? "",
           cover_url: data.shop.coverUrl ?? "",
+          categories: data.shop.categories,
         })
         .eq("id", viewer.shopId);
-      if (withBrand.error && isMissingColumnError(withBrand.error)) {
-        const basic = await this.client
+      if (!withContacts.error) {
+        // full schema
+      } else if (isMissingColumnError(withContacts.error)) {
+        const withBrand = await this.client
           .from("shops")
           .update({
             name: data.shop.name,
@@ -525,11 +542,28 @@ export class SupabaseCatalogRepository implements CatalogRepository {
             whatsapp: data.shop.whatsapp,
             currency: data.shop.currency,
             currency_symbol: data.shop.currencySymbol,
+            logo_url: data.shop.logoUrl ?? "",
+            cover_url: data.shop.coverUrl ?? "",
           })
           .eq("id", viewer.shopId);
-        if (basic.error) throw basic.error;
-      } else if (withBrand.error) {
-        throw withBrand.error;
+        if (withBrand.error && isMissingColumnError(withBrand.error)) {
+          const basic = await this.client
+            .from("shops")
+            .update({
+              name: data.shop.name,
+              tagline: joinShopTagline(data.shop.tagline, extras),
+              location: data.shop.location,
+              whatsapp: data.shop.whatsapp,
+              currency: data.shop.currency,
+              currency_symbol: data.shop.currencySymbol,
+            })
+            .eq("id", viewer.shopId);
+          if (basic.error) throw basic.error;
+        } else if (withBrand.error) {
+          throw withBrand.error;
+        }
+      } else {
+        throw withContacts.error;
       }
     }
 
@@ -710,6 +744,14 @@ export class SupabaseCatalogRepository implements CatalogRepository {
   async updateShop(viewer: Viewer, input: ShopInput): Promise<Shop> {
     const current = (await this.loadCatalog(viewer)).shop;
     const next = applyShopInput(current, input);
+    const extras = {
+      instagram: next.instagram,
+      telegram: next.telegram,
+      categories: next.categories,
+      logoUrl: next.logoUrl,
+      coverUrl: next.coverUrl,
+    };
+
     const payloads = [
       {
         name: next.name,
@@ -736,7 +778,8 @@ export class SupabaseCatalogRepository implements CatalogRepository {
       },
       {
         name: next.name,
-        tagline: next.tagline,
+        // Pack contacts into tagline until Supabase columns exist.
+        tagline: joinShopTagline(next.tagline, extras),
         location: next.location,
         whatsapp: next.whatsapp,
         currency: next.currency,
@@ -749,20 +792,10 @@ export class SupabaseCatalogRepository implements CatalogRepository {
         .from("shops")
         .update(payload)
         .eq("id", viewer.shopId);
-      if (!result.error) {
-        if (!("instagram" in payload)) {
-          return {
-            ...next,
-            instagram: "",
-            telegram: "",
-            categories: current.categories,
-          };
-        }
-        return next;
-      }
+      if (!result.error) return next;
       if (!isMissingColumnError(result.error)) throw result.error;
     }
-    return next;
+    throw new Error("Could not update shop settings");
   }
 
   async bulkUpdateItems(
