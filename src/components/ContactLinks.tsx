@@ -27,13 +27,13 @@ export function ContactLinks({
       key: "instagram",
       href: instagramHref(shop.instagram),
       label: t("contact.instagram"),
-      className: "btn btn-secondary",
+      className: "btn btn-instagram",
     },
     {
       key: "telegram",
       href: telegramHref(shop.telegram),
       label: t("contact.telegram"),
-      className: "btn btn-secondary",
+      className: "btn btn-telegram",
     },
   ].filter((link) => Boolean(link.href));
 

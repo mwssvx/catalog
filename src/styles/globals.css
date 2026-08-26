@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  /* Velviera research palette — soft luxury sleepwear */
-  --paper: #f7f1ea;
-  --paper-2: #fff8f4;
+  /* Velviera — soft blush-beige sleepwear */
+  --paper: #f6ebe4;
+  --paper-2: #fff6f1;
   --ink: #3a2f2c;
   --ink-soft: #5c4a45;
   --muted: #8a7a74;
-  --rule: #eadfd6;
+  --rule: #ead7d0;
   --olive: #c97b84;
   --olive-deep: #b56570;
   --sage: #d8e2dc;
@@ -43,8 +43,10 @@ body {
   margin: 0;
   min-height: 100%;
   background:
-    radial-gradient(ellipse 110% 70% at 50% -8%, #fde8e4 0%, transparent 55%),
-    var(--paper);
+    radial-gradient(ellipse 130% 90% at 50% -15%, #f8d9d4 0%, transparent 58%),
+    radial-gradient(ellipse 80% 50% at 100% 40%, #f3e0d8 0%, transparent 50%),
+    radial-gradient(ellipse 70% 45% at 0% 70%, #f5e4dc 0%, transparent 45%),
+    linear-gradient(180deg, #f8ebe5 0%, #f6ebe4 45%, #f3e6df 100%);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,6 +54,7 @@ body {
 
 #root {
   min-height: 100%;
+  background: transparent;
 }
 
 .font-display {
@@ -190,6 +193,40 @@ body {
 
 .btn-whatsapp:active {
   background: #189e4a;
+  color: #fff;
+}
+
+.btn-instagram {
+  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 45%, #8134af 100%);
+  color: #fff;
+  border-color: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.btn-instagram:hover {
+  background: linear-gradient(135deg, #ff9a45 0%, #e83a8a 45%, #9146c0 100%);
+  color: #fff;
+}
+
+.btn-instagram:active {
+  background: linear-gradient(135deg, #e07020 0%, #c41f6a 45%, #6f2a96 100%);
+  color: #fff;
+}
+
+.btn-telegram {
+  background: #2aabee;
+  color: #fff;
+  border-color: #229ed9;
+  border-radius: var(--radius-sm);
+}
+
+.btn-telegram:hover {
+  background: #229ed9;
+  color: #fff;
+}
+
+.btn-telegram:active {
+  background: #1b8fc4;
   color: #fff;
 }
 
