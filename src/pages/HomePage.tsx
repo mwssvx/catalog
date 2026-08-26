@@ -216,71 +216,76 @@ export function HomePage() {
           </div>
         ) : null}
 
-        <section className="space-y-8">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted">
-                {t("home.shopByCategory")}
-              </p>
-              <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-                {t("home.categoriesTitle")}
-              </h2>
-            </div>
+        <section className="space-y-7">
+          <div className="max-w-xl">
+            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+              {t("home.shopByCategory")}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
+              {t("home.categoriesHelp")}
+            </p>
           </div>
-          <div className="-mx-1 flex gap-5 overflow-x-auto px-1 pb-3 [scrollbar-width:thin]">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
             <button
               type="button"
               onClick={() => setCategory("all")}
-              className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
+              className={`flex flex-col items-center rounded-[1.5rem] bg-blush-card px-3 py-4 text-center shadow-sm transition ${
+                category === "all"
+                  ? "ring-2 ring-olive-deep/40"
+                  : "hover:-translate-y-0.5 hover:shadow-md"
+              }`}
             >
-              <span
-                className={`grid size-[5.5rem] place-items-center overflow-hidden rounded-[1.35rem] border transition ${
-                  category === "all"
-                    ? "border-olive-deep ring-2 ring-olive/25"
-                    : "border-rule bg-paper-2"
-                }`}
-              >
-                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-ink">
+              <span className="grid size-[4.75rem] place-items-center rounded-full bg-blush-circle sm:size-[5.25rem]">
+                <span className="text-sm font-semibold text-olive-deep">
                   {t("home.allKindsShort")}
                 </span>
               </span>
-              <span className="text-center text-xs font-medium text-muted">
+              <span className="mt-3 text-sm font-semibold text-ink">
                 {t("home.allKinds")}
+              </span>
+              <span className="mt-1 text-xs font-medium text-olive-deep">
+                {t("home.categoryItems", { count: availableCount })}
               </span>
             </button>
             {categories.map((value) => {
               const photo = categoryPhoto(value);
               const active = category === value;
+              const count = allItems.filter(
+                (item) =>
+                  item.category === value &&
+                  (item.status === "in_stock" || item.status === "reserved"),
+              ).length;
               return (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setCategory(value)}
-                  className="flex w-[5.5rem] shrink-0 flex-col items-center gap-3"
+                  className={`flex flex-col items-center rounded-[1.5rem] bg-blush-card px-3 py-4 text-center shadow-sm transition ${
+                    active
+                      ? "ring-2 ring-olive-deep/40"
+                      : "hover:-translate-y-0.5 hover:shadow-md"
+                  }`}
                 >
-                  <span
-                    className={`size-[5.5rem] overflow-hidden rounded-[1.35rem] border transition ${
-                      active
-                        ? "border-olive-deep ring-2 ring-olive/25"
-                        : "border-rule"
-                    }`}
-                  >
+                  <span className="relative grid size-[4.75rem] place-items-center overflow-hidden rounded-full bg-blush-circle p-1.5 sm:size-[5.25rem]">
                     {photo ? (
                       <img
                         src={photo}
                         alt=""
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full rounded-full object-cover"
                       />
                     ) : (
-                      <span className="grid h-full w-full place-items-center bg-sage/50 text-[0.6rem] font-semibold uppercase">
-                        {categoryLabel(value, t).slice(0, 6)}
+                      <span className="px-2 text-[0.7rem] font-semibold leading-tight text-olive-deep">
+                        {categoryLabel(value, t).slice(0, 10)}
                       </span>
                     )}
                   </span>
-                  <span className="line-clamp-2 text-center text-xs font-medium text-muted">
+                  <span className="mt-3 line-clamp-2 text-sm font-semibold text-ink">
                     {categoryLabel(value, t)}
+                  </span>
+                  <span className="mt-1 text-xs font-medium text-olive-deep">
+                    {t("home.categoryItems", { count })}
                   </span>
                 </button>
               );
