@@ -216,7 +216,7 @@ export function HomePage() {
           </div>
         ) : null}
 
-        <section className="space-y-7">
+        <section className="space-y-6">
           <div className="max-w-xl">
             <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               {t("home.shopByCategory")}
@@ -225,67 +225,56 @@ export function HomePage() {
               {t("home.categoriesHelp")}
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
             <button
               type="button"
               onClick={() => setCategory("all")}
-              className={`flex flex-col items-center rounded-[1.5rem] bg-blush-card px-3 py-4 text-center shadow-sm transition ${
-                category === "all"
-                  ? "ring-2 ring-olive-deep/40"
-                  : "hover:-translate-y-0.5 hover:shadow-md"
-              }`}
+              className="flex w-[4.75rem] shrink-0 flex-col items-center gap-2"
             >
-              <span className="grid size-[4.75rem] place-items-center rounded-full bg-blush-circle sm:size-[5.25rem]">
+              <span
+                className={`grid size-[4.75rem] place-items-center overflow-hidden rounded-full bg-blush-circle transition sm:size-20 ${
+                  category === "all" ? "ring-2 ring-olive-deep/50" : ""
+                }`}
+              >
                 <span className="text-sm font-semibold text-olive-deep">
                   {t("home.allKindsShort")}
                 </span>
               </span>
-              <span className="mt-3 text-sm font-semibold text-ink">
+              <span className="text-center text-xs font-medium text-muted">
                 {t("home.allKinds")}
-              </span>
-              <span className="mt-1 text-xs font-medium text-olive-deep">
-                {t("home.categoryItems", { count: availableCount })}
               </span>
             </button>
             {categories.map((value) => {
               const photo = categoryPhoto(value);
               const active = category === value;
-              const count = allItems.filter(
-                (item) =>
-                  item.category === value &&
-                  (item.status === "in_stock" || item.status === "reserved"),
-              ).length;
               return (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setCategory(value)}
-                  className={`flex flex-col items-center rounded-[1.5rem] bg-blush-card px-3 py-4 text-center shadow-sm transition ${
-                    active
-                      ? "ring-2 ring-olive-deep/40"
-                      : "hover:-translate-y-0.5 hover:shadow-md"
-                  }`}
+                  className="flex w-[4.75rem] shrink-0 flex-col items-center gap-2"
                 >
-                  <span className="relative grid size-[4.75rem] place-items-center overflow-hidden rounded-full bg-blush-circle p-1.5 sm:size-[5.25rem]">
+                  <span
+                    className={`size-[4.75rem] overflow-hidden rounded-full bg-blush-circle transition sm:size-20 ${
+                      active ? "ring-2 ring-olive-deep/50" : ""
+                    }`}
+                  >
                     {photo ? (
                       <img
                         src={photo}
                         alt=""
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full rounded-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="px-2 text-[0.7rem] font-semibold leading-tight text-olive-deep">
+                      <span className="grid h-full w-full place-items-center px-1 text-center text-[0.65rem] font-semibold leading-tight text-olive-deep">
                         {categoryLabel(value, t).slice(0, 10)}
                       </span>
                     )}
                   </span>
-                  <span className="mt-3 line-clamp-2 text-sm font-semibold text-ink">
+                  <span className="line-clamp-2 text-center text-xs font-medium text-muted">
                     {categoryLabel(value, t)}
-                  </span>
-                  <span className="mt-1 text-xs font-medium text-olive-deep">
-                    {t("home.categoryItems", { count })}
                   </span>
                 </button>
               );

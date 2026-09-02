@@ -12,7 +12,6 @@
   --olive-deep: #b56570;
   --sage: #d8e2dc;
   --sold: #c45c52;
-  --blush-card: #fff0eb;
   --blush-circle: #f3d2cb;
   --radius: 1.25rem;
   --radius-sm: 1rem;
@@ -31,7 +30,6 @@
   --color-olive-deep: var(--olive-deep);
   --color-sold: var(--sold);
   --color-sage: var(--sage);
-  --color-blush-card: var(--blush-card);
   --color-blush-circle: var(--blush-circle);
   --font-sans: var(--font-jakarta);
   --font-display: var(--font-display);

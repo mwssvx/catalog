@@ -142,6 +142,7 @@ export function ItemForm({
   async function save(nextPublished = published) {
     setPending(true);
     setError("");
+    setPublished(nextPublished);
     const body = {
       notes,
       title: stackedTitle,
@@ -171,6 +172,7 @@ export function ItemForm({
     };
     const response = await fetch(item ? `/api/v1/items/${item.id}` : "/api/v1/items", {
       method: item ? "PATCH" : "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
@@ -210,7 +212,8 @@ export function ItemForm({
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        void save(false);
+        // Respect the published checkbox (do not force unpublish on Save).
+        void save(published);
       }}
       className="space-y-4 pb-4"
     >

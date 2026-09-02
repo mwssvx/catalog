@@ -138,7 +138,7 @@ function mediaRecordFromRow(row: MediaRow): MediaRecord {
     checksum: row.checksum ?? null,
     kind: row.kind,
     uploadStatus: (row.upload_status as MediaRecord["uploadStatus"]) ?? "complete",
-    privacy: (row.privacy as MediaRecord["privacy"]) ?? "private",
+    privacy: (row.privacy as MediaRecord["privacy"]) ?? "public",
     multipartUploadId: row.multipart_upload_id ?? null,
     url: row.url,
     sortOrder: row.sort_order,
@@ -918,16 +918,29 @@ export class SupabaseCatalogRepository implements CatalogRepository {
         ? await table.get(id, shopId)
         : await table.findByUrl(shopId, stored);
       if (found) {
-        await table.update(found.id, shopId, {
-          productId: item.id,
-          variantId,
-          kind,
-          sortOrder,
-          url: found.storageKey ? found.url : stored,
-        });
+        try {
+          await table.update(found.id, shopId, {
+            productId: item.id,
+            variantId,
+            kind,
+            sortOrder,
+            url: found.storageKey ? found.url : stored,
+            privacy,
+            uploadStatus: "complete",
+          });
+        } catch (error) {
+          if (!isMissingColumnError(error as { message?: string })) throw error;
+          await table.update(found.id, shopId, {
+            productId: item.id,
+            variantId,
+            kind,
+            sortOrder,
+            url: found.storageKey ? found.url : stored,
+          });
+        }
         return;
       }
-      await this.client.from("media").insert({
+      const fullInsert = await this.client.from("media").insert({
         shop_id: shopId,
         product_id: item.id,
         variant_id: variantId,
@@ -938,6 +951,17 @@ export class SupabaseCatalogRepository implements CatalogRepository {
         privacy,
         original_filename: "",
       });
+      if (!fullInsert.error) return;
+      if (!isMissingColumnError(fullInsert.error)) throw fullInsert.error;
+      const basicInsert = await this.client.from("media").insert({
+        shop_id: shopId,
+        product_id: item.id,
+        variant_id: variantId,
+        kind,
+        url: stored,
+        sort_order: sortOrder,
+      });
+      if (basicInsert.error) throw basicInsert.error;
     };
 
     for (const variant of variants) {
