@@ -182,7 +182,9 @@ export function ItemForm({
       setError(payload.error || t("form.saveError"));
       return;
     }
-    router.push("/studio");
+    router.push(
+      nextPublished ? "/studio?notice=live" : "/studio?notice=draft",
+    );
   }
 
   async function onDelete() {
