@@ -23,6 +23,7 @@ const shopA = {
   instagram: "",
   telegram: "",
   categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
+  categoryPhotos: {},
 };
 
 function baseItem(over: Partial<Item> & { id: string }): Item {

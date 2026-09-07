@@ -15,6 +15,17 @@ describe("shop extras tagline packing", () => {
     expect(extras.categories).toEqual(["sets", "robes"]);
   });
 
+  it("round-trips category photos", () => {
+    const packed = joinShopTagline("Soft nights", {
+      categoryPhotos: { robes: "https://cdn.example/robe.jpg" },
+    });
+    const { tagline, extras } = splitShopTagline(packed);
+    expect(tagline).toBe("Soft nights");
+    expect(extras.categoryPhotos).toEqual({
+      robes: "https://cdn.example/robe.jpg",
+    });
+  });
+
   it("leaves plain taglines alone", () => {
     expect(splitShopTagline("Hello")).toEqual({ tagline: "Hello", extras: {} });
   });

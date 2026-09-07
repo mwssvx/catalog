@@ -274,6 +274,7 @@
     "help": "Это увидят покупатели на сайте и в WhatsApp.",
     "name": "Название",
     "description": "Описание",
+    "tagline": "Слоган",
     "location": "Где точка",
     "whatsapp": "WhatsApp, только цифры",
     "whatsappTest": "Проверить номер",
@@ -282,7 +283,8 @@
     "currency": "Валюта",
     "currencySymbol": "Знак",
     "logo": "Логотип",
-    "cover": "Обложка",
+    "cover": "Фото главной страницы",
+    "coverHelp": "Большое фото сверху на главной. Загрузите своё — без него показывается запасное.",
     "imageHint": "Одно фото. JPG, PNG или WebP.",
     "save": "Сохранить",
     "saving": "Сохраняю…",
@@ -300,9 +302,11 @@
     "telegramPlaceholder": "shop_name или @shop_name",
     "telegramHelp": "Ник или ссылка Telegram.",
     "categories": "Категории каталога",
-    "categoriesHelp": "Эти категории видят покупатели на главной. Нажмите на чип, чтобы удалить.",
+    "categoriesHelp": "Эти кружки видят покупатели на главной. Добавьте категорию, фото для кружка и сохраните.",
     "categoriesPlaceholder": "Например: Комплекты",
-    "categoriesAdd": "Добавить"
+    "categoriesAdd": "Добавить",
+    "categoriesDelete": "Удалить",
+    "categoriesPhotoHelp": "Фото для кружка на главной (из галереи)."
   },
   "contact": {
     "whatsapp": "WhatsApp",

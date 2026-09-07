@@ -15,6 +15,21 @@ function cleanCategories(list: string[] | undefined): string[] {
   return cleaned.length > 0 ? [...new Set(cleaned)] : [...DEFAULT_SHOP_CATEGORIES];
 }
 
+function cleanCategoryPhotos(
+  photos: Record<string, string> | undefined,
+  categories: string[],
+): Record<string, string> {
+  const allowed = new Set(categories);
+  const out: Record<string, string> = {};
+  for (const [key, url] of Object.entries(photos ?? {})) {
+    const trimmedKey = key.trim();
+    const trimmedUrl = url.trim();
+    if (!trimmedKey || !trimmedUrl || !allowed.has(trimmedKey)) continue;
+    out[trimmedKey] = trimmedUrl.slice(0, 2000);
+  }
+  return out;
+}
+
 export function emptyShop(): Shop {
   return {
     id: "",
@@ -30,11 +45,13 @@ export function emptyShop(): Shop {
     logoUrl: "",
     coverUrl: "",
     categories: [...DEFAULT_SHOP_CATEGORIES],
+    categoryPhotos: {},
   };
 }
 
 export function normalizeShop(shop: Partial<Shop> | undefined): Shop {
   const base = emptyShop();
+  const categories = cleanCategories(shop?.categories);
   return {
     id: shop?.id || base.id,
     slug: shop?.slug || base.slug,
@@ -48,11 +65,20 @@ export function normalizeShop(shop: Partial<Shop> | undefined): Shop {
     currencySymbol: shop?.currencySymbol || base.currencySymbol,
     logoUrl: shop?.logoUrl ?? "",
     coverUrl: shop?.coverUrl ?? "",
-    categories: cleanCategories(shop?.categories),
+    categories,
+    categoryPhotos: cleanCategoryPhotos(shop?.categoryPhotos, categories),
   };
 }
 
 export function applyShopInput(current: Shop, input: ShopInput): Shop {
+  const categories =
+    input.categories === undefined
+      ? current.categories
+      : cleanCategories(input.categories);
+  const categoryPhotos =
+    input.categoryPhotos === undefined
+      ? cleanCategoryPhotos(current.categoryPhotos, categories)
+      : cleanCategoryPhotos(input.categoryPhotos, categories);
   return normalizeShop({
     ...current,
     name: input.name?.trim() || current.name,
@@ -75,10 +101,8 @@ export function applyShopInput(current: Shop, input: ShopInput): Shop {
     currencySymbol: input.currencySymbol?.trim() || current.currencySymbol,
     logoUrl: input.logoUrl === undefined ? current.logoUrl : input.logoUrl,
     coverUrl: input.coverUrl === undefined ? current.coverUrl : input.coverUrl,
-    categories:
-      input.categories === undefined
-        ? current.categories
-        : cleanCategories(input.categories),
+    categories,
+    categoryPhotos,
   });
 }
 

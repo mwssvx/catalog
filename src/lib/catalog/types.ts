@@ -84,6 +84,8 @@ export type Shop = {
   coverUrl: string;
   /** Category keys/labels the owner offers in filters and item form. */
   categories: string[];
+  /** Optional circle photo URL per category key/label. */
+  categoryPhotos: Record<string, string>;
 };
 
 export type BoardElementType =
@@ -190,6 +192,7 @@ export type ShopInput = {
   logoUrl?: string;
   coverUrl?: string;
   categories?: string[];
+  categoryPhotos?: Record<string, string>;
 };
 
 export type BulkItemInput = {

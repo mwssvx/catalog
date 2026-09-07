@@ -20,6 +20,7 @@ export type PublicShop = {
   logoUrl: string;
   coverUrl: string;
   categories: string[];
+  categoryPhotos: Record<string, string>;
 };
 
 export function isOwnerOf(viewer: Viewer | null, shopId: string): boolean {
@@ -62,5 +63,6 @@ export function publicShopFields(shop: PublicShop): PublicShop {
     categories: shop.categories?.length
       ? shop.categories
       : [...DEFAULT_SHOP_CATEGORIES],
+    categoryPhotos: shop.categoryPhotos ?? {},
   };
 }

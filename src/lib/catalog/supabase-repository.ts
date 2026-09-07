@@ -169,6 +169,7 @@ function shopFromRow(row: ShopRow): Shop {
       logoUrl: row.logo_url ?? extras.logoUrl ?? "",
       coverUrl: row.cover_url ?? extras.coverUrl ?? "",
       categories: row.categories ?? extras.categories,
+      categoryPhotos: extras.categoryPhotos ?? {},
     }),
   );
 }
@@ -513,12 +514,13 @@ export class SupabaseCatalogRepository implements CatalogRepository {
         categories: data.shop.categories,
         logoUrl: data.shop.logoUrl,
         coverUrl: data.shop.coverUrl,
+        categoryPhotos: data.shop.categoryPhotos,
       };
       const withContacts = await this.client
         .from("shops")
         .update({
           name: data.shop.name,
-          tagline: data.shop.tagline,
+          tagline: joinShopTagline(data.shop.tagline, extras),
           location: data.shop.location,
           whatsapp: data.shop.whatsapp,
           instagram: data.shop.instagram,
@@ -537,7 +539,7 @@ export class SupabaseCatalogRepository implements CatalogRepository {
           .from("shops")
           .update({
             name: data.shop.name,
-            tagline: data.shop.tagline,
+            tagline: joinShopTagline(data.shop.tagline, extras),
             location: data.shop.location,
             whatsapp: data.shop.whatsapp,
             currency: data.shop.currency,
@@ -750,12 +752,15 @@ export class SupabaseCatalogRepository implements CatalogRepository {
       categories: next.categories,
       logoUrl: next.logoUrl,
       coverUrl: next.coverUrl,
+      categoryPhotos: next.categoryPhotos,
     };
+    // Keep category photos (and legacy extras) in tagline for DBs without columns.
+    const packedTagline = joinShopTagline(next.tagline, extras);
 
     const payloads = [
       {
         name: next.name,
-        tagline: next.tagline,
+        tagline: packedTagline,
         location: next.location,
         whatsapp: next.whatsapp,
         instagram: next.instagram,
@@ -768,7 +773,7 @@ export class SupabaseCatalogRepository implements CatalogRepository {
       },
       {
         name: next.name,
-        tagline: next.tagline,
+        tagline: packedTagline,
         location: next.location,
         whatsapp: next.whatsapp,
         currency: next.currency,
@@ -778,8 +783,7 @@ export class SupabaseCatalogRepository implements CatalogRepository {
       },
       {
         name: next.name,
-        // Pack contacts into tagline until Supabase columns exist.
-        tagline: joinShopTagline(next.tagline, extras),
+        tagline: packedTagline,
         location: next.location,
         whatsapp: next.whatsapp,
         currency: next.currency,

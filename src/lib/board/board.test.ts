@@ -31,6 +31,7 @@ const shop = {
   instagram: "",
   telegram: "",
   categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
+  categoryPhotos: {},
 };
 
 function media(id: string, x: number, y: number): BoardElement {

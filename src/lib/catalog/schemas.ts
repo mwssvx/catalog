@@ -143,6 +143,9 @@ export const shopUpdateSchema = z
     logoUrl: z.string().max(2000).optional(),
     coverUrl: z.string().max(2000).optional(),
     categories: z.array(z.string().trim().min(1).max(80)).max(40).optional(),
+    categoryPhotos: z
+      .record(z.string().trim().min(1).max(80), z.string().max(2000))
+      .optional(),
   })
   .strict();
 

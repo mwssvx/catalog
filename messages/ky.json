@@ -274,6 +274,7 @@
     "help": "Муну сатып алуучулар сайтта жана WhatsAppта көрөт.",
     "name": "Аты",
     "description": "Сүрөттөмө",
+    "tagline": "Слоган",
     "location": "Чекит кайда",
     "whatsapp": "WhatsApp, сандар гана",
     "whatsappTest": "Номерди текшер",
@@ -282,7 +283,8 @@
     "currency": "Акча бирдиги",
     "currencySymbol": "Белги",
     "logo": "Лого",
-    "cover": "Мукаба",
+    "cover": "Башкы беттин сүрөтү",
+    "coverHelp": "Башкы беттеги чоң сүрөт. Өзүңүздүктү жүктөңүз — жок болсо запас сүрөт көрсөтүлөт.",
     "imageHint": "Бир сүрөт. JPG, PNG же WebP.",
     "save": "Сактоо",
     "saving": "Сакталууда…",
@@ -300,9 +302,11 @@
     "telegramPlaceholder": "shop_name же @shop_name",
     "telegramHelp": "Telegram ниги же шилтемеси.",
     "categories": "Каталог категориялары",
-    "categoriesHelp": "Бул категорияларды кардарлар башкы бетте көрүшөт. Өчүрүү үчүн чипке басыңыз.",
+    "categoriesHelp": "Башкы беттеги тегерекчелер. Категорияны, тегерек сүрөтүн кошуп сактаңыз.",
     "categoriesPlaceholder": "Мисалы: Комплекттер",
-    "categoriesAdd": "Кошуу"
+    "categoriesAdd": "Кошуу",
+    "categoriesDelete": "Өчүрүү",
+    "categoriesPhotoHelp": "Башкы беттеги тегерекченин сүрөтү (галереядан)."
   },
   "contact": {
     "whatsapp": "WhatsApp",

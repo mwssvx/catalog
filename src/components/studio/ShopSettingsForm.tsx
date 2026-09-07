@@ -10,6 +10,10 @@ import {
 } from "@/lib/catalog/format";
 import type { Shop } from "@/lib/catalog/types";
 
+function slotsFromUrl(url: string | undefined): MediaSlot[] {
+  return url ? [{ url, kind: "image" }] : [];
+}
+
 export function ShopSettingsForm({ shop }: { shop: Shop }) {
   const { t } = useTranslation(undefined, { keyPrefix: "settings" });
   const { t: uploadT } = useTranslation(undefined, { keyPrefix: "form" });
@@ -24,15 +28,14 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
   const [categories, setCategories] = useState<string[]>(
     shop.categories?.length ? [...shop.categories] : [],
   );
+  const [categoryPhotos, setCategoryPhotos] = useState<Record<string, string>>(
+    () => ({ ...(shop.categoryPhotos ?? {}) }),
+  );
   const [newCategory, setNewCategory] = useState("");
   const [currency, setCurrency] = useState(shop.currency);
   const [currencySymbol, setCurrencySymbol] = useState(shop.currencySymbol);
-  const [logo, setLogo] = useState<MediaSlot[]>(
-    shop.logoUrl ? [{ url: shop.logoUrl, kind: "image" }] : [],
-  );
-  const [cover, setCover] = useState<MediaSlot[]>(
-    shop.coverUrl ? [{ url: shop.coverUrl, kind: "image" }] : [],
-  );
+  const [logo, setLogo] = useState<MediaSlot[]>(slotsFromUrl(shop.logoUrl));
+  const [cover, setCover] = useState<MediaSlot[]>(slotsFromUrl(shop.coverUrl));
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [pending, setPending] = useState(false);
@@ -51,6 +54,25 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
     urlOptional: uploadT("urlOptional"),
     urlInvalid: uploadT("urlInvalid"),
   };
+
+  function removeCategory(category: string) {
+    setCategories((current) => current.filter((value) => value !== category));
+    setCategoryPhotos((current) => {
+      const next = { ...current };
+      delete next[category];
+      return next;
+    });
+  }
+
+  function setCategoryPhoto(category: string, slots: MediaSlot[]) {
+    const url = slots[0] ? persistableUrl(slots[0].url) : "";
+    setCategoryPhotos((current) => {
+      const next = { ...current };
+      if (url) next[category] = url;
+      else delete next[category];
+      return next;
+    });
+  }
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -73,6 +95,7 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           instagram: instagram.trim(),
           telegram: telegram.trim(),
           categories,
+          categoryPhotos,
           currency,
           currencySymbol,
           logoUrl: logo[0] ? persistableUrl(logo[0].url) : "",
@@ -96,6 +119,9 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         setCategories(
           payload.shop.categories?.length ? [...payload.shop.categories] : [],
         );
+        setCategoryPhotos({ ...(payload.shop.categoryPhotos ?? {}) });
+        setCover(slotsFromUrl(payload.shop.coverUrl));
+        setLogo(slotsFromUrl(payload.shop.logoUrl));
       }
       setSaved(true);
     } catch (caught) {
@@ -138,9 +164,7 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           value={whatsapp}
           onChange={(event) => setWhatsapp(event.target.value)}
           className="field mt-2 min-h-11"
-          inputMode="tel"
           placeholder={t("whatsappPlaceholder")}
-          required
         />
         <span className="mt-1 block text-xs text-muted">{t("whatsappHelp")}</span>
       </label>
@@ -164,24 +188,52 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         />
         <span className="mt-1 block text-xs text-muted">{t("telegramHelp")}</span>
       </label>
-      <div>
-        <p className="text-sm font-medium text-muted">{t("categories")}</p>
-        <p className="mt-1 text-xs text-muted">{t("categoriesHelp")}</p>
-        <div className="mt-2 flex flex-wrap gap-2">
+
+      <section className="space-y-3 rounded-[22px] bg-paper px-4 py-4">
+        <div>
+          <p className="text-sm font-medium text-ink">{t("cover")}</p>
+          <p className="mt-1 text-xs text-muted">{t("coverHelp")}</p>
+        </div>
+        <MediaPicker
+          items={cover}
+          onChange={(slots) => setCover(slots.slice(-1))}
+          labels={labels}
+        />
+      </section>
+
+      <section className="space-y-3 rounded-[22px] bg-paper px-4 py-4">
+        <div>
+          <p className="text-sm font-medium text-ink">{t("categories")}</p>
+          <p className="mt-1 text-xs text-muted">{t("categoriesHelp")}</p>
+        </div>
+
+        <div className="space-y-4">
           {categories.map((category) => (
-            <button
+            <div
               key={category}
-              type="button"
-              className="chip min-h-10"
-              onClick={() =>
-                setCategories((current) => current.filter((value) => value !== category))
-              }
+              className="space-y-2 rounded-[18px] border border-rule bg-paper-2 px-3 py-3"
             >
-              {category} ×
-            </button>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-ink">{category}</p>
+                <button
+                  type="button"
+                  className="btn btn-secondary min-h-9 text-sold"
+                  onClick={() => removeCategory(category)}
+                >
+                  {t("categoriesDelete")}
+                </button>
+              </div>
+              <p className="text-xs text-muted">{t("categoriesPhotoHelp")}</p>
+              <MediaPicker
+                items={slotsFromUrl(categoryPhotos[category])}
+                onChange={(slots) => setCategoryPhoto(category, slots.slice(-1))}
+                labels={labels}
+              />
+            </div>
           ))}
         </div>
-        <div className="mt-2 flex gap-2">
+
+        <div className="flex gap-2 pt-1">
           <input
             value={newCategory}
             onChange={(event) => setNewCategory(event.target.value)}
@@ -203,7 +255,8 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
             {t("categoriesAdd")}
           </button>
         </div>
-      </div>
+      </section>
+
       {whatsappHref(whatsapp, t("whatsappTestMessage", { shop: name })) ? (
         <a
           href={whatsappHref(whatsapp, t("whatsappTestMessage", { shop: name }))!}
@@ -240,16 +293,6 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           <MediaPicker
             items={logo}
             onChange={(slots) => setLogo(slots.slice(-1))}
-            labels={labels}
-          />
-        </div>
-      </div>
-      <div>
-        <p className="text-sm font-medium text-muted">{t("cover")}</p>
-        <div className="mt-2">
-          <MediaPicker
-            items={cover}
-            onChange={(slots) => setCover(slots.slice(-1))}
             labels={labels}
           />
         </div>

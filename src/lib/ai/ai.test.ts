@@ -27,6 +27,7 @@ const shop: Shop = {
   instagram: "",
   telegram: "",
   categories: ["tops", "bottoms", "outerwear", "dresses", "shoes", "accessories"],
+  categoryPhotos: {},
 };
 
 function catalogWithMedia(urls: string[]): CatalogData {

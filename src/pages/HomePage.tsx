@@ -131,8 +131,11 @@ export function HomePage() {
     shop.categories?.length > 0 ? shop.categories : DEFAULT_SHOP_CATEGORIES;
   const brandName = shop.name?.trim() || "Velviera";
   const heroSrc = shop.coverUrl || HERO_FALLBACK;
+  const ownedCategoryPhotos = shop.categoryPhotos ?? {};
 
   function categoryPhoto(value: string): string | undefined {
+    const owned = ownedCategoryPhotos[value];
+    if (owned) return owned;
     const match = allItems.find(
       (item) => item.category === value && item.photos[0],
     );
