@@ -79,16 +79,29 @@ export function validateUploadInput(input: {
   size: number;
 }): FileValidation {
   const ext = extensionOf(input.filename);
-  const mime = input.mime.toLowerCase().trim();
+  let mime = input.mime.toLowerCase().trim();
+  if (mime === "image/jpg") mime = "image/jpeg";
   const expectedMime = MIME_BY_EXT[ext];
   if (!ext || !expectedMime) {
     return { ok: false, error: "Use JPG, PNG, WebP, GIF, MP4, WebM or MOV" };
   }
+  if (!mime) mime = expectedMime;
   if (!IMAGE_MIMES.has(mime) && !VIDEO_MIMES.has(mime)) {
     return { ok: false, error: "Use JPG, PNG, WebP, GIF, MP4, WebM or MOV" };
   }
-  if (expectedMime !== mime && !(ext === "jpg" && mime === "image/jpeg")) {
-    return { ok: false, error: "File type does not match the filename" };
+  const mimeMatchesExt =
+    expectedMime === mime ||
+    (ext === "jpg" && mime === "image/jpeg") ||
+    (ext === "jpeg" && mime === "image/jpeg") ||
+    (ext === "heic" && (mime === "image/heic" || mime === "image/heif")) ||
+    (ext === "heif" && (mime === "image/heic" || mime === "image/heif"));
+  if (!mimeMatchesExt) {
+    // Prefer extension when the browser reports a generic/wrong type.
+    if (IMAGE_MIMES.has(expectedMime) || VIDEO_MIMES.has(expectedMime)) {
+      mime = expectedMime;
+    } else {
+      return { ok: false, error: "File type does not match the filename" };
+    }
   }
   const kind = kindFromMime(mime);
   if (!kind) return { ok: false, error: "Unsupported file type" };

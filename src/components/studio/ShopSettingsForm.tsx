@@ -40,16 +40,15 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
   const labels = {
     remove: uploadT("removePhoto"),
     noPhoto: uploadT("noPhoto"),
+    addPhotos: uploadT("addPhotos"),
+    photoHint: uploadT("photoHint"),
+    uploadProgress: uploadT("uploadProgress"),
+    uploadError: uploadT("uploadError"),
     urlLabel: uploadT("urlLabel"),
     urlPlaceholder: uploadT("urlPlaceholder"),
     urlAdd: uploadT("urlAdd"),
     urlHelp: uploadT("urlHelp"),
-    urlExamplesTitle: uploadT("urlExamplesTitle"),
-    urlExamples: [
-      uploadT("urlExample1"),
-      uploadT("urlExample2"),
-      uploadT("urlExample3"),
-    ],
+    urlOptional: uploadT("urlOptional"),
     urlInvalid: uploadT("urlInvalid"),
   };
 

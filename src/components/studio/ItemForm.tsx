@@ -197,16 +197,15 @@ export function ItemForm({
   const uploadLabels = {
     remove: t("form.removePhoto"),
     noPhoto: t("form.noPhoto"),
+    addPhotos: t("form.addPhotos"),
+    photoHint: t("form.photoHint"),
+    uploadProgress: t("form.uploadProgress"),
+    uploadError: t("form.uploadError"),
     urlLabel: t("form.urlLabel"),
     urlPlaceholder: t("form.urlPlaceholder"),
     urlAdd: t("form.urlAdd"),
     urlHelp: t("form.urlHelp"),
-    urlExamplesTitle: t("form.urlExamplesTitle"),
-    urlExamples: [
-      t("form.urlExample1"),
-      t("form.urlExample2"),
-      t("form.urlExample3"),
-    ],
+    urlOptional: t("form.urlOptional"),
     urlInvalid: t("form.urlInvalid"),
   };
 

@@ -3,6 +3,7 @@ import { availableSizes } from "@/lib/catalog/store";
 import { jsonError } from "@/lib/http/respond";
 import { registerAuthRoutes } from "./auth";
 import { registerItemsRoutes } from "./items";
+import { registerMediaRoutes } from "./media";
 import { registerParseRoutes } from "./parse";
 import { registerShopRoutes } from "./shop";
 
@@ -15,6 +16,7 @@ export function registerV1Routes(app: Hono) {
   registerAuthRoutes(app);
   registerShopRoutes(app);
   registerItemsRoutes(app);
+  registerMediaRoutes(app);
   registerParseRoutes(app);
 
   app.get("/api/v1/meta/sizes", async (c) => {

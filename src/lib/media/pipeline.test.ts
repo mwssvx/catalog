@@ -17,7 +17,7 @@ const owner = {
 };
 
 describe("upload validation", () => {
-  it("rejects mismatched extension and MIME type", () => {
+  it("rejects unsupported types and coerces wrong mime from extension", () => {
     expect(
       validateUploadInput({
         filename: "look.exe",
@@ -30,8 +30,8 @@ describe("upload validation", () => {
         filename: "look.jpg",
         mime: "video/mp4",
         size: 12,
-      }).ok,
-    ).toBe(false);
+      }),
+    ).toMatchObject({ ok: true, mime: "image/jpeg", kind: "image" });
   });
 
   it("accepts phone photo and video types within size limits", () => {
