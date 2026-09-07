@@ -205,6 +205,67 @@ export function HomePage() {
         </div>
       </section>
 
+      <section
+        aria-label={t("home.shopByCategory")}
+        className="w-full bg-[color-mix(in_srgb,var(--paper)_70%,#f8e8e2)] px-4 py-10 sm:px-8 sm:py-12 lg:px-12"
+      >
+        <div className="mx-auto w-full">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="font-display text-[1.85rem] font-semibold leading-none tracking-tight text-ink sm:text-[2.35rem]">
+              {t("home.shopByCategory")}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setCategory("all")}
+              className="shrink-0 pb-1 text-sm font-medium text-ink transition hover:text-olive-deep"
+            >
+              {t("home.viewAll")}
+            </button>
+          </div>
+
+          <div className="mt-8 flex w-full gap-4 overflow-x-auto pb-1 [scrollbar-width:none] sm:gap-5 md:justify-between md:gap-3 md:overflow-visible lg:gap-4 [&::-webkit-scrollbar]:hidden">
+            {categories.map((value) => {
+              const photo = categoryPhoto(value);
+              const active = category === value;
+              const label = categoryLabel(value, t);
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setCategory(value)}
+                  className="group flex w-[6.75rem] shrink-0 flex-col items-center gap-3 md:w-auto md:min-w-0 md:flex-1 md:max-w-[8rem]"
+                >
+                  <span
+                    className={`mx-auto aspect-square size-[6.75rem] overflow-hidden rounded-full bg-blush-circle transition md:size-auto md:w-[min(100%,8rem)] ${
+                      active
+                        ? "ring-2 ring-ink/35 ring-offset-2 ring-offset-[color-mix(in_srgb,var(--paper)_70%,#f8e8e2)]"
+                        : "group-hover:ring-1 group-hover:ring-ink/15"
+                    }`}
+                  >
+                    {photo ? (
+                      <img
+                        src={photo}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="grid h-full w-full place-items-center px-2 text-center text-xs font-semibold leading-tight text-ink">
+                        {label.slice(0, 12)}
+                      </span>
+                    )}
+                  </span>
+                  <span className="line-clamp-2 max-w-[8rem] text-center text-[0.8rem] font-semibold leading-snug text-ink sm:text-[0.9rem]">
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <main className="mx-auto w-full max-w-6xl flex-1 space-y-16 px-5 py-14 sm:px-8 sm:py-20">
         {error ? (
           <div className="flex flex-wrap items-center gap-3 rounded-xl bg-paper-2 px-4 py-3 text-sm">
@@ -218,72 +279,6 @@ export function HomePage() {
             </button>
           </div>
         ) : null}
-
-        <section className="space-y-6">
-          <div className="max-w-xl">
-            <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-              {t("home.shopByCategory")}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-              {t("home.categoriesHelp")}
-            </p>
-          </div>
-          <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
-            <button
-              type="button"
-              onClick={() => setCategory("all")}
-              className="flex w-[4.75rem] shrink-0 flex-col items-center gap-2"
-            >
-              <span
-                className={`grid size-[4.75rem] place-items-center overflow-hidden rounded-full bg-blush-circle transition sm:size-20 ${
-                  category === "all" ? "ring-2 ring-olive-deep/50" : ""
-                }`}
-              >
-                <span className="text-sm font-semibold text-olive-deep">
-                  {t("home.allKindsShort")}
-                </span>
-              </span>
-              <span className="text-center text-xs font-medium text-muted">
-                {t("home.allKinds")}
-              </span>
-            </button>
-            {categories.map((value) => {
-              const photo = categoryPhoto(value);
-              const active = category === value;
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setCategory(value)}
-                  className="flex w-[4.75rem] shrink-0 flex-col items-center gap-2"
-                >
-                  <span
-                    className={`size-[4.75rem] overflow-hidden rounded-full bg-blush-circle transition sm:size-20 ${
-                      active ? "ring-2 ring-olive-deep/50" : ""
-                    }`}
-                  >
-                    {photo ? (
-                      <img
-                        src={photo}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="grid h-full w-full place-items-center px-1 text-center text-[0.65rem] font-semibold leading-tight text-olive-deep">
-                        {categoryLabel(value, t).slice(0, 10)}
-                      </span>
-                    )}
-                  </span>
-                  <span className="line-clamp-2 text-center text-xs font-medium text-muted">
-                    {categoryLabel(value, t)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </section>
 
         <section id="catalog" className="scroll-mt-24 space-y-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
