@@ -201,6 +201,7 @@ export function ItemForm({
     photoHint: t("form.photoHint"),
     uploadProgress: t("form.uploadProgress"),
     uploadError: t("form.uploadError"),
+    uploadPartial: t("form.uploadPartial"),
     urlLabel: t("form.urlLabel"),
     urlPlaceholder: t("form.urlPlaceholder"),
     urlAdd: t("form.urlAdd"),
@@ -296,6 +297,7 @@ export function ItemForm({
                 })
               }
               labels={uploadLabels}
+              maxFiles={40}
             />
           </div>
         ))}

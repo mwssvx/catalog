@@ -47,6 +47,7 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
     photoHint: uploadT("photoHint"),
     uploadProgress: uploadT("uploadProgress"),
     uploadError: uploadT("uploadError"),
+    uploadPartial: uploadT("uploadPartial"),
     urlLabel: uploadT("urlLabel"),
     urlPlaceholder: uploadT("urlPlaceholder"),
     urlAdd: uploadT("urlAdd"),
@@ -196,8 +197,9 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         </div>
         <MediaPicker
           items={cover}
-          onChange={(slots) => setCover(slots.slice(-1))}
+          onChange={setCover}
           labels={labels}
+          maxFiles={1}
         />
       </section>
 
@@ -226,8 +228,9 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
               <p className="text-xs text-muted">{t("categoriesPhotoHelp")}</p>
               <MediaPicker
                 items={slotsFromUrl(categoryPhotos[category])}
-                onChange={(slots) => setCategoryPhoto(category, slots.slice(-1))}
+                onChange={(slots) => setCategoryPhoto(category, slots)}
                 labels={labels}
+                maxFiles={1}
               />
             </div>
           ))}
@@ -292,8 +295,9 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         <div className="mt-2">
           <MediaPicker
             items={logo}
-            onChange={(slots) => setLogo(slots.slice(-1))}
+            onChange={setLogo}
             labels={labels}
+            maxFiles={1}
           />
         </div>
       </div>

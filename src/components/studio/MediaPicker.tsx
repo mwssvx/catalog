@@ -14,6 +14,7 @@ type Labels = {
   photoHint?: string;
   uploadProgress?: string;
   uploadError?: string;
+  uploadPartial?: string;
   urlLabel: string;
   urlPlaceholder: string;
   urlAdd: string;
@@ -32,62 +33,70 @@ function guessKindFromMime(mime: string): "image" | "video" {
   return mime.startsWith("video/") ? "video" : "image";
 }
 
-async function uploadFile(file: File): Promise<MediaSlot> {
-  const signResponse = await fetch("/api/v1/media/sign", {
+function isLikelyImage(file: File): boolean {
+  if (file.type.startsWith("video/")) return false;
+  if (file.type.startsWith("image/")) return true;
+  return /\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name || "");
+}
+
+async function preparePhoto(file: File): Promise<File> {
+  if (!isLikelyImage(file) || file.type === "image/gif") return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const max = 2048;
+    const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) {
+      bitmap.close();
+      return file;
+    }
+    context.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (next) => (next ? resolve(next) : reject(new Error("jpeg"))),
+        "image/jpeg",
+        0.84,
+      );
+    });
+    const base = (file.name || "photo").replace(/\.[^.]+$/, "") || "photo";
+    return new File([blob], `${base}.jpg`, { type: "image/jpeg" });
+  } catch {
+    if (!file.name || !file.name.includes(".")) {
+      return new File([file], `photo-${Date.now()}.jpg`, {
+        type: file.type || "image/jpeg",
+      });
+    }
+    return file;
+  }
+}
+
+async function uploadThroughApi(file: File): Promise<MediaSlot> {
+  const ready = await preparePhoto(file);
+  const form = new FormData();
+  form.append("file", ready, ready.name);
+  const response = await fetch("/api/v1/media/upload", {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      filename: file.name || `photo-${Date.now()}.jpg`,
-      mime: file.type || "",
-      size: file.size,
-    }),
+    body: form,
   });
-  const signPayload = (await signResponse.json()) as {
-    signedUrl?: string;
-    token?: string;
-    path?: string;
+  const payload = (await response.json()) as {
     publicUrl?: string;
     kind?: "image" | "video";
     error?: string;
   };
-  if (
-    !signResponse.ok ||
-    !signPayload.signedUrl ||
-    !signPayload.publicUrl ||
-    !signPayload.token
-  ) {
-    throw new Error(signPayload.error || "upload failed");
+  if (!response.ok || !payload.publicUrl) {
+    throw new Error(payload.error || "upload failed");
   }
-
-  const body = new FormData();
-  body.append("cacheControl", "3600");
-  body.append("", file);
-
-  const putResponse = await fetch(signPayload.signedUrl, {
-    method: "PUT",
-    headers: { "x-upsert": "true" },
-    body,
-  });
-  if (!putResponse.ok) {
-    // Fallback: some Supabase projects accept a raw binary PUT.
-    const raw = await fetch(signPayload.signedUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": file.type || "application/octet-stream",
-        "x-upsert": "true",
-      },
-      body: file,
-    });
-    if (!raw.ok) {
-      throw new Error(`upload put ${putResponse.status}`);
-    }
-  }
-
   return {
-    url: signPayload.publicUrl,
-    kind: signPayload.kind ?? guessKindFromMime(file.type),
-    preview: URL.createObjectURL(file),
+    url: payload.publicUrl,
+    kind: payload.kind ?? guessKindFromMime(ready.type),
+    preview: URL.createObjectURL(ready),
   };
 }
 
@@ -95,10 +104,12 @@ export function MediaPicker({
   items,
   onChange,
   labels,
+  maxFiles = 40,
 }: {
   items: MediaSlot[];
   onChange: (items: MediaSlot[]) => void;
   labels: Labels;
+  maxFiles?: number;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [urlDraft, setUrlDraft] = useState("");
@@ -106,6 +117,8 @@ export function MediaPicker({
   const [showLink, setShowLink] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+
+  const allowMany = maxFiles > 1;
 
   function addUrl() {
     const url = urlDraft.trim();
@@ -118,7 +131,8 @@ export function MediaPicker({
       setUrlDraft("");
       return;
     }
-    onChange([...items, { url, kind: guessKind(url) }]);
+    const next = [...items, { url, kind: guessKind(url) }];
+    onChange(allowMany ? next.slice(0, maxFiles) : next.slice(-1));
     setUrlDraft("");
   }
 
@@ -126,21 +140,33 @@ export function MediaPicker({
     if (!fileList || fileList.length === 0) return;
     setUploading(true);
     setError("");
-    const next = [...items];
-    try {
-      for (const file of Array.from(fileList)) {
-        const slot = await uploadFile(file);
-        if (!next.some((entry) => entry.url === slot.url)) {
-          next.push(slot);
-        }
+    const picked = Array.from(fileList);
+    const room = Math.max(0, maxFiles - items.length);
+    const files = allowMany ? picked.slice(0, room) : picked.slice(-1);
+    const next = allowMany ? [...items] : [];
+    let failed = 0;
+    for (const file of files) {
+      try {
+        const slot = await uploadThroughApi(file);
+        if (next.some((entry) => entry.url === slot.url)) continue;
+        if (allowMany) next.push(slot);
+        else next.splice(0, next.length, slot);
+      } catch {
+        failed += 1;
       }
-      onChange(next);
-    } catch {
-      setError(labels.uploadError || "Upload failed");
-    } finally {
-      setUploading(false);
-      if (inputRef.current) inputRef.current.value = "";
     }
+    onChange(next.slice(0, maxFiles));
+    if (failed > 0 && next.length === items.length && allowMany) {
+      setError(labels.uploadError || "Upload failed");
+    } else if (failed > 0) {
+      setError(
+        labels.uploadPartial ||
+          labels.uploadError ||
+          "Some photos could not be uploaded",
+      );
+    }
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   return (
@@ -173,8 +199,8 @@ export function MediaPicker({
       <input
         ref={inputRef}
         type="file"
-        accept="image/*,video/*,.heic,.heif"
-        multiple
+        accept="image/*"
+        multiple={allowMany}
         className="sr-only"
         onChange={(event) => void onFilesSelected(event.target.files)}
       />

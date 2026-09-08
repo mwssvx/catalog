@@ -80,7 +80,8 @@ export function validateUploadInput(input: {
 }): FileValidation {
   const ext = extensionOf(input.filename);
   let mime = input.mime.toLowerCase().trim();
-  if (mime === "image/jpg") mime = "image/jpeg";
+  if (mime === "image/jpg" || mime === "image/pjpeg") mime = "image/jpeg";
+  if (mime === "application/octet-stream") mime = "";
   const expectedMime = MIME_BY_EXT[ext];
   if (!ext || !expectedMime) {
     return { ok: false, error: "Use JPG, PNG, WebP, GIF, MP4, WebM or MOV" };

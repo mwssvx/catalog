@@ -25,7 +25,8 @@ export function normalizeUploadMeta(input: {
 }): { filename: string; mime: string; size: number } {
   let filename = sanitizeOriginalFilename(input.filename || "photo.jpg");
   let mime = (input.mime || "").toLowerCase().trim();
-  if (mime === "image/jpg") mime = "image/jpeg";
+  if (mime === "image/jpg" || mime === "image/pjpeg") mime = "image/jpeg";
+  if (mime === "application/octet-stream") mime = "";
 
   let ext = filename.includes(".")
     ? filename.slice(filename.lastIndexOf(".") + 1).toLowerCase()
@@ -64,8 +65,7 @@ export function normalizeUploadMeta(input: {
 async function ensureMediaBucket() {
   if (ensuredBucket === MEDIA_BUCKET) return;
   const admin = createAdminClient();
-  const { data: buckets, error: listError } = await admin.storage.listBuckets();
-  if (listError) throw listError;
+  const { data: buckets } = await admin.storage.listBuckets();
   const exists = (buckets ?? []).some((bucket) => bucket.name === MEDIA_BUCKET);
   if (!exists) {
     const { error } = await admin.storage.createBucket(MEDIA_BUCKET, {
@@ -73,6 +73,7 @@ async function ensureMediaBucket() {
       fileSizeLimit: "20MB",
       allowedMimeTypes: [
         "image/jpeg",
+        "image/jpg",
         "image/png",
         "image/webp",
         "image/gif",
@@ -83,11 +84,55 @@ async function ensureMediaBucket() {
         "video/quicktime",
       ],
     });
-    if (error && !/already exists/i.test(error.message)) {
-      throw error;
+    if (error && !/already exists/i.test(error.message ?? "")) {
+      // Upload may still work if the bucket already exists but list failed.
+      if (!/row-level security|permission|not allowed/i.test(error.message ?? "")) {
+        throw error;
+      }
     }
   }
   ensuredBucket = MEDIA_BUCKET;
+}
+
+function requireServiceRole() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()) {
+    throw new ConfigError("Missing SUPABASE_SERVICE_ROLE_KEY for photo uploads");
+  }
+}
+
+export async function storeUploadedFile(input: {
+  shopId: string;
+  filename: string;
+  mime: string;
+  size: number;
+  body: Blob | ArrayBuffer | Uint8Array | File;
+}): Promise<{
+  path: string;
+  publicUrl: string;
+  kind: "image" | "video";
+}> {
+  requireServiceRole();
+  const normalized = normalizeUploadMeta(input);
+  const check = validateUploadInput(normalized);
+  if (!check.ok) throw new ValidationError(check.error);
+
+  await ensureMediaBucket();
+
+  const mediaId = crypto.randomUUID();
+  const path = `shops/${input.shopId}/${mediaId}.${check.ext}`;
+  const admin = createAdminClient();
+  const { error } = await admin.storage.from(MEDIA_BUCKET).upload(path, input.body, {
+    contentType: check.mime,
+    upsert: true,
+    cacheControl: "3600",
+  });
+  if (error) throw error;
+
+  return {
+    path,
+    publicUrl: publicStorageUrl(path),
+    kind: check.kind,
+  };
 }
 
 export async function createSignedMediaUpload(input: {
@@ -102,9 +147,7 @@ export async function createSignedMediaUpload(input: {
   publicUrl: string;
   kind: "image" | "video";
 }> {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()) {
-    throw new ConfigError("Missing SUPABASE_SERVICE_ROLE_KEY for photo uploads");
-  }
+  requireServiceRole();
 
   const normalized = normalizeUploadMeta(input);
   const check = validateUploadInput(normalized);

@@ -30,6 +30,16 @@ describe("normalizeUploadMeta", () => {
     });
     expect(meta.filename.endsWith(".jpg")).toBe(true);
   });
+
+  it("accepts iPhone gallery files with empty name or octet-stream", () => {
+    const unnamed = normalizeUploadMeta({
+      filename: "",
+      mime: "application/octet-stream",
+      size: 80_000,
+    });
+    expect(validateUploadInput(unnamed).ok).toBe(true);
+    expect(unnamed.mime).toBe("image/jpeg");
+  });
 });
 
 describe("validateUploadInput leniency", () => {
