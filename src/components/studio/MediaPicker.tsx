@@ -25,6 +25,15 @@ type Labels = {
   urlOptional?: string;
 };
 
+type SignPayload = {
+  signedUrl?: string;
+  token?: string;
+  path?: string;
+  publicUrl?: string;
+  kind?: "image" | "video";
+  error?: string;
+};
+
 function guessKind(url: string): "image" | "video" {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url) ? "video" : "image";
 }
@@ -43,7 +52,7 @@ async function preparePhoto(file: File): Promise<File> {
   if (!isLikelyImage(file) || file.type === "image/gif") return file;
   try {
     const bitmap = await createImageBitmap(file);
-    const max = 2048;
+    const max = 1600;
     const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
@@ -61,7 +70,7 @@ async function preparePhoto(file: File): Promise<File> {
       canvas.toBlob(
         (next) => (next ? resolve(next) : reject(new Error("jpeg"))),
         "image/jpeg",
-        0.84,
+        0.72,
       );
     });
     const base = (file.name || "photo").replace(/\.[^.]+$/, "") || "photo";
@@ -76,8 +85,60 @@ async function preparePhoto(file: File): Promise<File> {
   }
 }
 
+async function putToSignedUrl(signedUrl: string, file: File): Promise<void> {
+  const form = new FormData();
+  form.append("cacheControl", "3600");
+  form.append("", file);
+  const formPut = await fetch(signedUrl, {
+    method: "PUT",
+    headers: { "x-upsert": "true" },
+    body: form,
+  });
+  if (formPut.ok) return;
+
+  const rawPut = await fetch(signedUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type || "image/jpeg",
+      "x-upsert": "true",
+    },
+    body: file,
+  });
+  if (!rawPut.ok) {
+    const detail = (await rawPut.text().catch(() => "")).slice(0, 160);
+    throw new Error(detail || `Storage upload failed (${rawPut.status})`);
+  }
+}
+
+async function uploadThroughSignedUrl(file: File): Promise<MediaSlot> {
+  const ready = await preparePhoto(file);
+  const signResponse = await fetch("/api/v1/media/sign", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      filename: ready.name || `photo-${Date.now()}.jpg`,
+      mime: ready.type || "image/jpeg",
+      size: ready.size,
+    }),
+  });
+  const signPayload = (await signResponse.json()) as SignPayload;
+  if (!signResponse.ok || !signPayload.signedUrl || !signPayload.publicUrl) {
+    throw new Error(signPayload.error || `Sign failed (${signResponse.status})`);
+  }
+  await putToSignedUrl(signPayload.signedUrl, ready);
+  return {
+    url: signPayload.publicUrl,
+    kind: signPayload.kind ?? guessKindFromMime(ready.type),
+    preview: URL.createObjectURL(ready),
+  };
+}
+
 async function uploadThroughApi(file: File): Promise<MediaSlot> {
   const ready = await preparePhoto(file);
+  if (ready.size > 3_500_000) {
+    throw new Error("Photo is too large for server upload");
+  }
   const form = new FormData();
   form.append("file", ready, ready.name);
   const response = await fetch("/api/v1/media/upload", {
@@ -91,13 +152,28 @@ async function uploadThroughApi(file: File): Promise<MediaSlot> {
     error?: string;
   };
   if (!response.ok || !payload.publicUrl) {
-    throw new Error(payload.error || "upload failed");
+    throw new Error(payload.error || `Upload failed (${response.status})`);
   }
   return {
     url: payload.publicUrl,
     kind: payload.kind ?? guessKindFromMime(ready.type),
     preview: URL.createObjectURL(ready),
   };
+}
+
+async function uploadFile(file: File): Promise<MediaSlot> {
+  try {
+    return await uploadThroughSignedUrl(file);
+  } catch (signedError) {
+    try {
+      return await uploadThroughApi(file);
+    } catch (apiError) {
+      const signedMsg =
+        signedError instanceof Error ? signedError.message : "signed failed";
+      const apiMsg = apiError instanceof Error ? apiError.message : "api failed";
+      throw new Error(apiMsg || signedMsg);
+    }
+  }
 }
 
 export function MediaPicker({
@@ -143,27 +219,36 @@ export function MediaPicker({
     const picked = Array.from(fileList);
     const room = Math.max(0, maxFiles - items.length);
     const files = allowMany ? picked.slice(0, room) : picked.slice(-1);
+    if (allowMany && room <= 0) {
+      setError(labels.uploadError || "Upload failed");
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
     const next = allowMany ? [...items] : [];
     let failed = 0;
+    let lastError = "";
     for (const file of files) {
       try {
-        const slot = await uploadThroughApi(file);
+        const slot = await uploadFile(file);
         if (next.some((entry) => entry.url === slot.url)) continue;
         if (allowMany) next.push(slot);
         else next.splice(0, next.length, slot);
-      } catch {
+      } catch (caught) {
         failed += 1;
+        lastError = caught instanceof Error ? caught.message : "";
       }
     }
     onChange(next.slice(0, maxFiles));
-    if (failed > 0 && next.length === items.length && allowMany) {
-      setError(labels.uploadError || "Upload failed");
-    } else if (failed > 0) {
-      setError(
-        labels.uploadPartial ||
-          labels.uploadError ||
-          "Some photos could not be uploaded",
-      );
+    if (failed > 0) {
+      const fallback = labels.uploadError || "Upload failed";
+      if (next.length <= items.length && allowMany === false) {
+        setError(lastError || fallback);
+      } else if (failed === files.length) {
+        setError(lastError || fallback);
+      } else {
+        setError(labels.uploadPartial || lastError || fallback);
+      }
     }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";
@@ -205,7 +290,7 @@ export function MediaPicker({
         onChange={(event) => void onFilesSelected(event.target.files)}
       />
 
-      {error ? <p className="text-sm text-sold">{error}</p> : null}
+      {error ? <p className="text-sm text-sold break-words">{error}</p> : null}
 
       {showLink ? (
         <div className="space-y-2 rounded-[16px] border border-rule bg-paper px-4 py-3">

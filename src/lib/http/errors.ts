@@ -50,7 +50,11 @@ export function publicErrorMessage(error: unknown): { status: number; error: str
     return { status: 409, error: "Board was updated elsewhere. Reload and try again." };
   }
   if (error instanceof ConfigError) {
-    return { status: 503, error: "Catalog storage is not configured" };
+    return {
+      status: 503,
+      error:
+        "Photo storage is not configured. Add SUPABASE_SERVICE_ROLE_KEY in Vercel → Settings → Environment Variables, then Redeploy.",
+    };
   }
   if (error instanceof ZodError) {
     return { status: 400, error: "Invalid input" };
@@ -66,6 +70,9 @@ export function publicErrorMessage(error: unknown): { status: number; error: str
         error:
           "Invalid Supabase API key. In Vercel use the legacy anon JWT (eyJ...), not sb_publishable_...",
       };
+    }
+    if (/bucket|storage|mime|not found|row-level security|policy|payload too large|entity too large/i.test(message)) {
+      return { status: 400, error: message.slice(0, 240) };
     }
   }
   return { status: 400, error: "Request failed" };

@@ -5,6 +5,7 @@ import { ValidationError } from "@/lib/http/errors";
 import { jsonError, readJson } from "@/lib/http/respond";
 import {
   createSignedMediaUpload,
+  MEDIA_BUCKET,
   storeUploadedFile,
 } from "@/lib/media/storage-upload";
 
@@ -16,7 +17,29 @@ const signSchema = z
   })
   .strict();
 
+function asUploadFile(value: unknown): File | null {
+  if (value instanceof File && value.size > 0) return value;
+  if (Array.isArray(value)) {
+    const first = value.find((entry) => entry instanceof File && entry.size > 0);
+    return first instanceof File ? first : null;
+  }
+  return null;
+}
+
 export function registerMediaRoutes(app: Hono) {
+  app.get("/api/v1/media/status", async (c) => {
+    try {
+      await requireOwner();
+      return Response.json({
+        ok: true,
+        bucket: MEDIA_BUCKET,
+        serviceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()),
+      });
+    } catch (error) {
+      return jsonError(error);
+    }
+  });
+
   app.post("/api/v1/media/sign", async (c) => {
     try {
       const viewer = await requireOwner();
@@ -42,9 +65,15 @@ export function registerMediaRoutes(app: Hono) {
   app.post("/api/v1/media/upload", async (c) => {
     try {
       const viewer = await requireOwner();
-      const form = await c.req.raw.formData();
-      const file = form.get("file");
-      if (!(file instanceof File) || file.size <= 0) {
+      let file: File | null = null;
+      try {
+        const parsed = await c.req.parseBody({ all: true });
+        file = asUploadFile(parsed.file);
+      } catch {
+        const form = await c.req.raw.formData();
+        file = asUploadFile(form.get("file"));
+      }
+      if (!file) {
         throw new ValidationError("Choose a photo from the gallery");
       }
       const stored = await storeUploadedFile({
