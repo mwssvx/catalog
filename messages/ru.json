@@ -308,7 +308,8 @@
     "categoriesPlaceholder": "Например: Комплекты",
     "categoriesAdd": "Добавить",
     "categoriesDelete": "Удалить",
-    "categoriesPhotoHelp": "Фото для кружка на главной (из галереи)."
+    "categoriesPhotoHelp": "Фото для кружка на главной (из галереи).",
+    "categoriesSaveHint": "После добавления нажмите «Сохранить» внизу — иначе категория не останется."
   },
   "contact": {
     "whatsapp": "WhatsApp",

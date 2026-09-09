@@ -308,7 +308,8 @@
     "categoriesPlaceholder": "Мисалы: Комплекттер",
     "categoriesAdd": "Кошуу",
     "categoriesDelete": "Өчүрүү",
-    "categoriesPhotoHelp": "Башкы беттеги тегерекченин сүрөтү (галереядан)."
+    "categoriesPhotoHelp": "Башкы беттеги тегерекченин сүрөтү (галереядан).",
+    "categoriesSaveHint": "Кошкондон кийин ылдыйдагы «Сактоо»ну басыңыз — болбосо категория калбайт."
   },
   "contact": {
     "whatsapp": "WhatsApp",

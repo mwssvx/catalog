@@ -168,10 +168,13 @@ function shopFromRow(row: ShopRow): Shop {
       currencySymbol: row.currency_symbol,
       logoUrl: row.logo_url || extras.logoUrl || "",
       coverUrl: row.cover_url || extras.coverUrl || "",
+      // Prefer packed extras when present — fallback saves may skip the categories column.
       categories:
-        row.categories && row.categories.length > 0
-          ? row.categories
-          : extras.categories,
+        extras.categories && extras.categories.length > 0
+          ? extras.categories
+          : row.categories && row.categories.length > 0
+            ? row.categories
+            : undefined,
       categoryPhotos: extras.categoryPhotos ?? {},
     }),
   );
@@ -783,6 +786,16 @@ export class SupabaseCatalogRepository implements CatalogRepository {
         currency_symbol: next.currencySymbol,
         logo_url: next.logoUrl,
         cover_url: next.coverUrl,
+        categories: next.categories,
+      },
+      {
+        name: next.name,
+        tagline: packedTagline,
+        location: next.location,
+        whatsapp: next.whatsapp,
+        currency: next.currency,
+        currency_symbol: next.currencySymbol,
+        categories: next.categories,
       },
       {
         name: next.name,

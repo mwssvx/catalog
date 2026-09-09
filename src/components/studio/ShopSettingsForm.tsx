@@ -56,6 +56,15 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
     urlInvalid: uploadT("urlInvalid"),
   };
 
+  function commitNewCategory(list: string[] = categories): string[] {
+    const value = newCategory.trim();
+    if (!value) return list;
+    const next = list.includes(value) ? list : [...list, value];
+    setCategories(next);
+    setNewCategory("");
+    return next;
+  }
+
   function removeCategory(category: string) {
     setCategories((current) => current.filter((value) => value !== category));
     setCategoryPhotos((current) => {
@@ -84,6 +93,7 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
       if (isPlaceholderWhatsapp(whatsapp) || whatsappDigits(whatsapp).length < 9) {
         throw new Error(t("whatsappRequired"));
       }
+      const nextCategories = commitNewCategory();
       const response = await fetch("/api/v1/shop", {
         method: "PUT",
         credentials: "include",
@@ -95,7 +105,7 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           whatsapp: whatsappDigits(whatsapp),
           instagram: instagram.trim(),
           telegram: telegram.trim(),
-          categories,
+          categories: nextCategories,
           categoryPhotos,
           currency,
           currencySymbol,
@@ -109,7 +119,11 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
       };
       if (!response.ok) {
         const message = payload.error || t("saveError");
-        if (/instagram|telegram|categories|logo|cover|pending\.sql|columns are missing/i.test(message)) {
+        if (
+          /pending\.sql|columns are missing|column .* does not exist|Could not find the '.+' column/i.test(
+            message,
+          )
+        ) {
           throw new Error(t("schemaMissing"));
         }
         throw new Error(message);
@@ -118,7 +132,9 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         setInstagram(payload.shop.instagram ?? "");
         setTelegram(payload.shop.telegram ?? "");
         setCategories(
-          payload.shop.categories?.length ? [...payload.shop.categories] : [],
+          payload.shop.categories?.length
+            ? [...payload.shop.categories]
+            : nextCategories,
         );
         setCategoryPhotos({
           ...(payload.shop.categoryPhotos ?? categoryPhotos),
@@ -244,24 +260,23 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
           <input
             value={newCategory}
             onChange={(event) => setNewCategory(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              commitNewCategory();
+            }}
             className="field min-h-11 flex-1"
             placeholder={t("categoriesPlaceholder")}
           />
           <button
             type="button"
             className="btn btn-secondary min-h-11"
-            onClick={() => {
-              const value = newCategory.trim();
-              if (!value) return;
-              setCategories((current) =>
-                current.includes(value) ? current : [...current, value],
-              );
-              setNewCategory("");
-            }}
+            onClick={() => commitNewCategory()}
           >
             {t("categoriesAdd")}
           </button>
         </div>
+        <p className="text-xs text-muted">{t("categoriesSaveHint")}</p>
       </section>
 
       {whatsappHref(whatsapp, t("whatsappTestMessage", { shop: name })) ? (
