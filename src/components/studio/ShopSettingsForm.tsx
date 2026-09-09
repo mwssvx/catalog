@@ -120,9 +120,13 @@ export function ShopSettingsForm({ shop }: { shop: Shop }) {
         setCategories(
           payload.shop.categories?.length ? [...payload.shop.categories] : [],
         );
-        setCategoryPhotos({ ...(payload.shop.categoryPhotos ?? {}) });
-        setCover(slotsFromUrl(payload.shop.coverUrl));
-        setLogo(slotsFromUrl(payload.shop.logoUrl));
+        setCategoryPhotos({
+          ...(payload.shop.categoryPhotos ?? categoryPhotos),
+        });
+        setCover(
+          slotsFromUrl(payload.shop.coverUrl || cover[0]?.url || ""),
+        );
+        setLogo(slotsFromUrl(payload.shop.logoUrl || logo[0]?.url || ""));
       }
       setSaved(true);
     } catch (caught) {

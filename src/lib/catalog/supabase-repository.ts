@@ -166,9 +166,12 @@ function shopFromRow(row: ShopRow): Shop {
       telegram: row.telegram ?? extras.telegram ?? "",
       currency: row.currency,
       currencySymbol: row.currency_symbol,
-      logoUrl: row.logo_url ?? extras.logoUrl ?? "",
-      coverUrl: row.cover_url ?? extras.coverUrl ?? "",
-      categories: row.categories ?? extras.categories,
+      logoUrl: row.logo_url || extras.logoUrl || "",
+      coverUrl: row.cover_url || extras.coverUrl || "",
+      categories:
+        row.categories && row.categories.length > 0
+          ? row.categories
+          : extras.categories,
       categoryPhotos: extras.categoryPhotos ?? {},
     }),
   );

@@ -140,11 +140,11 @@ export const shopUpdateSchema = z
     telegram: z.string().max(120).optional(),
     currency: z.string().trim().min(1).max(8).optional(),
     currencySymbol: z.string().trim().min(1).max(12).optional(),
-    logoUrl: z.string().max(2000).optional(),
-    coverUrl: z.string().max(2000).optional(),
+    logoUrl: z.string().max(4000).optional(),
+    coverUrl: z.string().max(4000).optional(),
     categories: z.array(z.string().trim().min(1).max(80)).max(40).optional(),
     categoryPhotos: z
-      .record(z.string().trim().min(1).max(80), z.string().max(2000))
+      .record(z.string().trim().min(1).max(80), z.string().max(4000))
       .optional(),
   })
   .strict();

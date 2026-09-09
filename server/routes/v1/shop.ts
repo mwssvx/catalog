@@ -19,6 +19,7 @@ function publicShopPayload(shop: Awaited<ReturnType<typeof getShop>>) {
     logoUrl: shop.logoUrl,
     coverUrl: shop.coverUrl,
     categories: shop.categories,
+    categoryPhotos: shop.categoryPhotos ?? {},
   };
 }
 
